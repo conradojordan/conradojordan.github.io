@@ -497,7 +497,7 @@ function heal() {
     // Enforce it to be at least 5
     healPrice = Math.max(5, healPrice);
     if (confirm(`Are you sure you want to heal? It will cost you ${healPrice} gold coins.`)) {
-        if (character.gold > healPrice) {
+        if (character.gold >= healPrice) {
             character.currentHealth = character.maxHealth;
             character.gold -= healPrice;
         } else {
