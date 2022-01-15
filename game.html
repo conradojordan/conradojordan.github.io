@@ -1,1 +1,37 @@
-hello world
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conrado's Game</title>
+    <link rel="stylesheet" href="awesome-style.css">
+</head>
+
+<body>
+    <h1>Welcome to Conrado's Game (v 0.1.0)</h1>
+    <div id="game-space">
+        <p id="first-text">Please enter your name:</p>
+        <input type="text" id="name-input">
+        <br>
+        <button id="new-game-button" onclick="newGame()">Start game!</button>
+    </div>
+
+    <script>
+        // Enable starting game by pressing enter
+        var input = document.getElementById("name-input");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("new-game-button").click();
+            }
+        });
+    </script>
+
+    <script src="enemies.js"></script>
+    <script src="items.js"></script>
+    <script src="game.js"></script>
+</body>
+
+</html>
