@@ -128,6 +128,9 @@ function battleTurn() {
             gameOver();
         } else {
             let lootItems = calculateBattleLoot();
+            if (lootItems.length == 0) {
+                lootItems.push("nothing")
+            }
             alert(`Battle over! You won, yay!! 🎉\nFound: ${lootItems.join(', ')}`);
         }
         clearGameSpace();
