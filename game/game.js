@@ -1,6 +1,7 @@
 let character;
 let characterName = "Dumbass";
 let currentEnemy = {};
+let battleLogs = []
 
 
 // Main game space (global)
@@ -18,10 +19,16 @@ function gameOver() {
         intelligence: 5,
         currentHealth: 20,
         maxHealth: 20,
-        equippedWeapon: {},
+        equippedWeapon: {
+            id: 1000,
+            name: "Small Knife",
+            type: "weapon",
+            attack: 5,
+            defense: 0
+        },
         equippedShield: {},
         gold: 0,
-        backpack: [{ id: 1000, quantity: 1 }]
+        backpack: []
     };
 }
 
@@ -86,8 +93,9 @@ function showBattleButton() {
 }
 
 function startBattle() {
-    var chooseEnemies = document.getElementById("choose-enemies");
-    var chosenEnemyId = chooseEnemies.value;
+    battleLogs = [];
+    let chooseEnemies = document.getElementById("choose-enemies");
+    let chosenEnemyId = chooseEnemies.value;
 
     let enemy = all_enemies.filter(en => en.id == chosenEnemyId)[0];
     // Clone enemy and set as currentEnemy (global variable)
@@ -104,6 +112,24 @@ function normalDistribution(mean = 0, variance = 1) {
     return (result * variance + mean);
 }
 
+function showBattleLogs() {
+    let battleLog = document.createElement("div");
+    battleLog.id = "battle-log";
+
+    let battleLogTitle = document.createElement("h3");
+    battleLogTitle.id = "battle-log-title";
+    battleLogTitle.innerText = "Battle logs";
+    battleLog.appendChild(battleLogTitle);
+
+    if (battleLogs.length > 0) {
+        for (let element of battleLogs) {
+            battleLog.appendChild(element);
+        }
+    }
+    gs.appendChild(battleLog);
+
+}
+
 function battleTurn() {
     calculateBattleTurn();
     clearGameSpace();
@@ -114,13 +140,13 @@ function battleTurn() {
 
     // VERSUS
     let versus = document.createElement("h2");
-    versus.innerText = "VERSUS";
+    versus.innerText = "VS.";
     versus.id = "versus"
     gs.appendChild(versus);
 
-    insertLineBreak(gs, 1);
-
     showEnemyInformation();
+
+    showBattleLogs();
 
     if (character.currentHealth == 0 || currentEnemy.currentHealth == 0) {
         if (character.currentHealth == 0) {
@@ -186,7 +212,6 @@ function getFinalDamage(damagePotential, target) {
     let strength = target == "enemy" ? character.strength : currentEnemy.strength;
     let tenPercentOfStrength = strength * 0.1;
     damage += Math.random() * 2 * tenPercentOfStrength - tenPercentOfStrength;
-    console.log(`Damage to ${target} before reduction is ${damage}`);
 
     let resilience = target == "enemy" ? currentEnemy.resilience : character.resilience;
     let defense = 0.4 * resilience;
@@ -198,7 +223,6 @@ function getFinalDamage(damagePotential, target) {
     if (damage < 0) {
         damage = 0;
     }
-    console.log(`Damage to ${target} after reduction is ${damage}`);
     return damage
 }
 
