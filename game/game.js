@@ -328,7 +328,7 @@ function showNameLevelAndExp() {
     let characterExpTitle = document.createElement("span");
     characterExpTitle.id = "exp-title";
     let totExp = character.experience;
-    characterExpTitle.innerText = `Exp - ${totExp}`;
+    characterExpTitle.innerText = `🛠 Exp - ${totExp}`;
     gs.appendChild(characterExpTitle);
 
     // Exp for next level
