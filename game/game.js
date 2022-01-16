@@ -150,15 +150,19 @@ function showReturnToTownButton() {
     gs.appendChild(returnToTownButton);
 }
 
-function calculateLevelAndExp(character, expDiff) {
-    character.experience += expDiff;
-    if (character.experience >= totalExpForLevel(character.level + 1)) {
-        // TODO: solve case form when character ups more than 1 level
-        character.level += 1;
-        character.maxHealth += 5;
-        character.strength += 2;
-        character.resilience += 2;
-        character.intelligence += 1;
+function calculateLevelAndStats(character) {
+    let calculatedLevel = exp_table.filter(x => x <= character.experience).length - 1;
+    let levelChanged = calculatedLevel != character.level;
+
+    character.level = calculatedLevel;
+    character.maxHealth = (character.level-1)*5 + 20;
+    character.strength = (character.level-1)*2 + 10;
+    character.resilience = (character.level-1)*2 + 10;
+    character.intelligence = (character.level-1)*1 + 5;
+
+    if (levelChanged) {
+        // Character died or grew in level, both should restore life
+        character.currentHealth = character.maxHealth;
     }
     return character;
 }
@@ -166,7 +170,6 @@ function calculateLevelAndExp(character, expDiff) {
 function deathPenalty(character) {
     character.experience = Math.round(character.experience*0.9);
     character.gold = 0;
-    character.currentHealth = character.maxHealth;
     return character;
 }
 
@@ -191,14 +194,15 @@ function battleTurn() {
     if (character.currentHealth == 0 || currentEnemy.currentHealth == 0) {
         if (character.currentHealth == 0) {
             alert(`Battle over!! The ${nameAndSymbol(currentEnemy)} won 💀\nYou have lost 10% of your total experience and all your gold.`);
-            character = deathPenalty(character);
+            character = calculateLevelAndStats(deathPenalty(character));
             returnToTown();
         } else {
             let lootItems = calculateBattleLoot();
             if (lootItems.length == 0) {
                 lootItems.push("nothing")
             }
-            character = calculateLevelAndExp(character, currentEnemy.experience);
+            character.experience += currentEnemy.experience;
+            character = calculateLevelAndStats(character);
             showReturnToTownButton();
             alert(`Battle over! You won, yay!! 🎉\nLoot: ${lootItems.join(', ')}`);
         }
