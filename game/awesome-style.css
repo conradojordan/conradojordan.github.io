@@ -28,6 +28,19 @@ select {
     margin: 10px 10px 10px 0px;
 }
 
+#name-and-level {
+    margin: 3px;
+}
+
+#exp-title {
+    margin-left: 3px;
+    margin-right: 10px;
+}
+
+#exp-next-level {
+    font-size: smaller;
+}
+
 .gray-border {
     margin-bottom: 5px;
     padding: 1%;

@@ -60,7 +60,7 @@ function insertLineBreak(element, count = 1) {
 
 function chooseBattle() {
     clearGameSpace();
-    showCharacterNameAndLevel();
+    showNameLevelAndExp();
     showHuntScreen();
 }
 
@@ -146,7 +146,7 @@ function showReturnToTownButton() {
 function battleTurn() {
     calculateBattleTurn();
     clearGameSpace();
-    showCharacterNameAndLevel();
+    showNameLevelAndExp();
     showCharacterInfo();
 
     insertLineBreak(gs, 1);
@@ -296,10 +296,44 @@ function showHuntScreen() {
     showBattleButton();
 }
 
-function showCharacterNameAndLevel() {
+function totalExpForLevel(level) {
+    let prev = level - 1;
+    return (50 * (prev ** 3) - 150 * (prev ** 2) + 400 * prev) / 3
+}
+
+function expForNextLevel(exp, level) {
+    return totalExpForLevel(level + 1) - exp
+}
+
+function showNameLevelAndExp() {
+    // Name and level
     let characterNameAndLevel = document.createElement("h3");
+    characterNameAndLevel.id = "name-and-level";
     characterNameAndLevel.innerText = `${character.name} - human level ${character.level}`;
     gs.appendChild(characterNameAndLevel);
+
+    // Exp text
+    let characterExpTitle = document.createElement("span");
+    characterExpTitle.id = "exp-title";
+    let totExp = character.experience;
+    characterExpTitle.innerText = `Exp - ${totExp}`;
+    gs.appendChild(characterExpTitle);
+
+    // Exp for next level
+    let expNextLevel = document.createElement("p");
+    expNextLevel.id = "exp-next-level";
+    let expNext = expForNextLevel(totExp, character.level);
+    expNextLevel.innerText = `(${expNext} for next level)`;
+
+    // Experience Bar
+    let characterExpBar = document.createElement("progress");
+    characterExpBar.id = "exp-bar";
+    let percentageExp = (character.experience - totalExpForLevel(character.level));
+    percentageExp /= (totalExpForLevel(character.level + 1) - totalExpForLevel(character.level));
+    characterExpBar.setAttribute("value", Math.round(percentageExp * 100));
+    characterExpBar.setAttribute("max", 100);
+    gs.appendChild(characterExpBar);
+    gs.appendChild(expNextLevel);
 }
 
 function showCharacterInfo() {
@@ -610,7 +644,7 @@ function showHuntShopAndHealButtons() {
 }
 
 function showMainScreen() {
-    showCharacterNameAndLevel();
+    showNameLevelAndExp();
     showCharacterInfo();
     showEquippedItems();
     showCharacterGold();
