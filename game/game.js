@@ -706,8 +706,8 @@ function showHuntShopAndHealButtons() {
 }
 
 function returnToTown() {
-    setCookie("characterName", character.name, 5000);
-    setCookie("character", JSON.stringify(character), 5000);
+    setCookie("characterName", character.name, 0.1);
+    setCookie("character", JSON.stringify(character), 0.1);
     clearGameSpace();
     showMainScreen();
 }
@@ -727,8 +727,6 @@ function showMainScreen() {
 function newGame() {
     characterName = getCookie("characterName");
     cookieCharacter = getCookie("character");
-    console.log(`characterName = ${characterName}`);
-    console.log(`cookieCharacter = ${cookieCharacter}`);
 
     if (cookieCharacter == "") {
         showGetNameScreen();
