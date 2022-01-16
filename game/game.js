@@ -271,6 +271,7 @@ function showCharacterInfo() {
     // Character info
     let characterInfo = document.createElement("div");
     characterInfo.id = "character-info";
+    characterInfo.className = "gray-border";
 
     // Character info title
     let characterInfoTitle = document.createElement("p");
@@ -319,6 +320,7 @@ function createBackpackItemElement(itemReference) {
 function showCharacterBackpack() {
     let backpackSpace = document.createElement("div");
     backpackSpace.id = "backpack-space";
+    backpackSpace.className = "gray-border";
 
     let backpackTitle = document.createElement("p");
     backpackTitle.id = "backpack-title";
@@ -403,6 +405,7 @@ function equipItem(itemType) {
 function showEquippedItems() {
     let equippedItems = document.createElement("div");
     equippedItems.id = "equipped-items";
+    equippedItems.className = "gray-border";
 
     let equippedItemsTitle = document.createElement("p");
     equippedItemsTitle.id = "equipped-items-title";
@@ -507,6 +510,7 @@ function showEquippedItems() {
 function showCharacterGold() {
     let characterGold = document.createElement("div");
     characterGold.id = "character-gold";
+    characterGold.className = "gray-border";
 
     let characterGoldTitle = document.createElement("p");
     characterGoldTitle.id = "character-gold-title";
