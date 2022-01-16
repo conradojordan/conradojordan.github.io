@@ -306,6 +306,7 @@ function showHuntScreen() {
     showEnemiesList();
     insertLineBreak(gs, 2);
     showBattleButton();
+    showReturnToTownButton();
 }
 
 function totalExpForLevel(level) {
