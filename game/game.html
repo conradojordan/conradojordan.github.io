@@ -10,24 +10,10 @@
 </head>
 
 <body>
-    <h1>Welcome to Conrado's Game (v 0.1.3)</h1>
+    <h1>Welcome to Conrado's Game (v 0.2.0)</h1>
     <div id="game-space">
-        <p id="first-text">Please enter your name:</p>
-        <input type="text" id="name-input">
-        <br>
-        <button id="new-game-button" onclick="newGame()">Start game!</button>
     </div>
 
-    <script>
-        // Enable starting game by pressing enter
-        var input = document.getElementById("name-input");
-        input.addEventListener("keyup", function (event) {
-            if (event.keyCode === 13) {
-                event.preventDefault();
-                document.getElementById("new-game-button").click();
-            }
-        });
-    </script>
 
     <script src="enemies.js"></script>
     <script src="items.js"></script>

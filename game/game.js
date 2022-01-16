@@ -1,5 +1,5 @@
-let character;
 let characterName = "Dumbass";
+let character;
 let currentEnemy = {};
 let battleLogs = []
 
@@ -9,7 +9,7 @@ let gs = document.getElementById("game-space");
 
 
 // Game functions
-function gameOver() {
+function resetCharacter() {
     character = {
         name: characterName,
         level: 1,
@@ -32,6 +32,29 @@ function gameOver() {
     };
 }
 
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";Secure;path=/";
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 function clearGameSpace() {
     while (gs.firstChild) {
         gs.lastChild.remove()
@@ -42,6 +65,34 @@ function getHealthColor(currentHealth, maxHealth) {
     if (currentHealth / maxHealth > 0.7) return "green";
     else if (currentHealth / maxHealth < 0.3) return "red";
     else return "goldenrod";
+}
+
+function showGetNameScreen() {
+    let getNameTitle = document.createElement("p");
+    getNameTitle.id = "get-name-title";
+    getNameTitle.innerText = "Please enter your name: ";
+    gs.appendChild(getNameTitle);
+
+    let getNameInput = document.createElement("input");
+    getNameInput.setAttribute("type", "text");
+    getNameInput.id = "name-input";
+    gs.appendChild(getNameInput);
+
+    insertLineBreak(gs, 1);
+
+    let startGameButton = document.createElement("button");
+    startGameButton.id = "start-game-button";
+    startGameButton.setAttribute("onclick", "getName(); resetCharacter(); returnToTown();");
+    startGameButton.innerText = "Start Game!"
+    gs.appendChild(startGameButton);
+
+    // Enable starting game by pressing enter
+    getNameInput.addEventListener("keyup", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("start-game-button").click();
+        }
+    });
 }
 
 function getName() {
@@ -138,7 +189,7 @@ function showReturnToTownButton() {
     let returnToTownButton = document.createElement("button");
     returnToTownButton.innerText = "🏘️ Return to town";
     returnToTownButton.id = "return-to-town-button";
-    returnToTownButton.setAttribute("onclick", "clearGameSpace(); showMainScreen();");
+    returnToTownButton.setAttribute("onclick", "returnToTown();");
     gs.appendChild(returnToTownButton);
 }
 
@@ -175,7 +226,7 @@ function battleTurn() {
     if (character.currentHealth == 0 || currentEnemy.currentHealth == 0) {
         if (character.currentHealth == 0) {
             alert(`Battle over!! The ${currentEnemy.name.toLowerCase()} won. Game over 💀`);
-            gameOver();
+            resetCharacter();
         } else {
             let lootItems = calculateBattleLoot();
             if (lootItems.length == 0) {
@@ -478,8 +529,7 @@ function equipItem(itemType) {
         }
         removeFromBackpack(chosenItemId, 1);
     }
-    clearGameSpace();
-    showMainScreen();
+    returnToTown();
 }
 
 
@@ -621,8 +671,7 @@ function heal() {
         } else {
             alert("You do not have enough gold! Please stop being poor and come again.");
         }
-        clearGameSpace();
-        showMainScreen();
+        returnToTown();
     }
 }
 
@@ -656,6 +705,13 @@ function showHuntShopAndHealButtons() {
     gs.appendChild(travelInTimeButton);
 }
 
+function returnToTown() {
+    setCookie("characterName", character.name, 5000);
+    setCookie("character", JSON.stringify(character), 5000);
+    clearGameSpace();
+    showMainScreen();
+}
+
 function showMainScreen() {
     showNameLevelAndExp();
     showCharacterInfo();
@@ -669,8 +725,17 @@ function showMainScreen() {
 }
 
 function newGame() {
-    getName();
-    gameOver();
-    clearGameSpace();
-    showMainScreen();
+    characterName = getCookie("characterName");
+    cookieCharacter = getCookie("character");
+    console.log(`characterName = ${characterName}`);
+    console.log(`cookieCharacter = ${cookieCharacter}`);
+
+    if (cookieCharacter == "") {
+        showGetNameScreen();
+    } else {
+        character = JSON.parse(cookieCharacter);
+        returnToTown();
+    }
 }
+
+newGame();
