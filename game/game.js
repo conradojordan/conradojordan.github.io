@@ -32,39 +32,11 @@ function resetCharacter() {
     };
 }
 
-function setCookie(cname, cvalue, exdays) {
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";Secure;path=/";
-}
-
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
 
 function clearGameSpace() {
     while (gs.firstChild) {
         gs.lastChild.remove()
     }
-}
-
-function getHealthColor(currentHealth, maxHealth) {
-    if (currentHealth / maxHealth > 0.7) return "green";
-    else if (currentHealth / maxHealth < 0.3) return "red";
-    else return "goldenrod";
 }
 
 function showGetNameScreen() {
@@ -99,13 +71,6 @@ function getName() {
     let nameInput = document.getElementById("name-input");
     if (nameInput.value) {
         characterName = nameInput.value;
-    }
-}
-
-function insertLineBreak(element, count = 1) {
-    for (let i = 0; i < count; i++) {
-        let br = document.createElement("br");
-        element.appendChild(br);
     }
 }
 
@@ -159,14 +124,6 @@ function startBattle() {
     battleTurn();
 }
 
-function normalDistribution(mean = 0, variance = 1) {
-    let u = 0, v = 0;
-    while (u === 0) u = Math.random();
-    while (v === 0) v = Math.random();
-    let result = Math.sqrt(- 2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-    return (result * variance + mean);
-}
-
 function showBattleLogs() {
     let battleLog = document.createElement("div");
     battleLog.id = "battle-log";
@@ -193,8 +150,8 @@ function showReturnToTownButton() {
     gs.appendChild(returnToTownButton);
 }
 
-function calculateLevelAndExp() {
-    character.experience += currentEnemy.experience;
+function calculateLevelAndExp(character, expDiff) {
+    character.experience += expDiff;
     if (character.experience >= totalExpForLevel(character.level + 1)) {
         // TODO: solve case form when character ups more than 1 level
         character.level += 1;
@@ -203,6 +160,14 @@ function calculateLevelAndExp() {
         character.resilience += 2;
         character.intelligence += 1;
     }
+    return character;
+}
+
+function deathPenalty(character) {
+    character.experience = Math.round(character.experience*0.9);
+    character.gold = 0;
+    character.currentHealth = character.maxHealth;
+    return character;
 }
 
 function battleTurn() {
@@ -225,16 +190,17 @@ function battleTurn() {
 
     if (character.currentHealth == 0 || currentEnemy.currentHealth == 0) {
         if (character.currentHealth == 0) {
-            alert(`Battle over!! The ${currentEnemy.name.toLowerCase()} won. Game over 💀`);
-            resetCharacter();
+            alert(`Battle over!! The ${nameAndSymbol(currentEnemy)} won 💀\nYou have lost 10% of your total experience and all your gold.`);
+            character = deathPenalty(character);
+            returnToTown();
         } else {
             let lootItems = calculateBattleLoot();
             if (lootItems.length == 0) {
                 lootItems.push("nothing")
             }
-            calculateLevelAndExp();
+            character = calculateLevelAndExp(character, currentEnemy.experience);
             showReturnToTownButton();
-            alert(`Battle over! You won, yay!! 🎉\nFound: ${lootItems.join(', ')}`);
+            alert(`Battle over! You won, yay!! 🎉\nLoot: ${lootItems.join(', ')}`);
         }
     } else {
         setTimeout(battleTurn, 1000);
@@ -301,10 +267,6 @@ function getFinalDamage(damagePotential, target) {
     return damage
 }
 
-function nameAndSymbol(enemy) {
-    return enemy.symbol + " " + enemy.name;
-}
-
 function logDamage(damage, toEnemy = true) {
     let damageLog = document.createElement("p");
     if (toEnemy) {
@@ -358,15 +320,6 @@ function showHuntScreen() {
     insertLineBreak(gs, 2);
     showBattleButton();
     showReturnToTownButton();
-}
-
-function totalExpForLevel(level) {
-    let prev = level - 1;
-    return (50 * (prev ** 3) - 150 * (prev ** 2) + 400 * prev) / 3
-}
-
-function expForNextLevel(exp, level) {
-    return totalExpForLevel(level + 1) - exp
 }
 
 function showNameLevelAndExp() {
@@ -475,21 +428,6 @@ function showCharacterBackpack() {
     gs.appendChild(backpackSpace);
 }
 
-function retrieveItem(id) {
-    return all_items.filter(item => item.id == id)[0];
-}
-
-function getBackpackItems(backpack) {
-    let items = [];
-    for (let itemReference of backpack) {
-        item = retrieveItem(itemReference.id);
-        for (let i = 0; i < itemReference.quantity; i++) {
-            items.push(item);
-        }
-    }
-    return items
-}
-
 function addToBackpack(itemId, quantity) {
     let foundItems = character.backpack.filter(x => x.id == itemId);
     if (foundItems.length > 0) {
@@ -531,7 +469,6 @@ function equipItem(itemType) {
     }
     returnToTown();
 }
-
 
 
 function showEquippedItems() {
@@ -673,10 +610,6 @@ function heal() {
         }
         returnToTown();
     }
-}
-
-function travelInTime() {
-    alert("It worked!! You are a couple of seconds in the future.")
 }
 
 function showHuntShopAndHealButtons() {
