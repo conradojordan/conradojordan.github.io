@@ -72,13 +72,12 @@ select {
 
 #battle-log {
     margin-top: 20px;
-    padding: 1px;
+    padding: 5px;
     border: 1px solid rgb(255, 83, 83);
-    height: 20vh;
 }
 
 #battle-log-title {
     color: rgb(148, 82, 38);
     font-weight: bold;
-    margin: 2px;
+    margin: 3px;
 }

@@ -87,13 +87,17 @@ function showEnemiesList() {
 
 function showBattleButton() {
     let battleButton = document.createElement("button");
-    battleButton.innerText = "Battle!";
+    battleButton.innerText = "⚔️ Battle!";
     battleButton.setAttribute("onclick", "startBattle()");
     gs.appendChild(battleButton);
 }
 
 function startBattle() {
     battleLogs = [];
+    let battleStarted = document.createElement("p");
+    battleStarted.innerText = "The battle has started!";
+    battleLogs.push(battleStarted);
+
     let chooseEnemies = document.getElementById("choose-enemies");
     let chosenEnemyId = chooseEnemies.value;
 
@@ -122,12 +126,21 @@ function showBattleLogs() {
     battleLog.appendChild(battleLogTitle);
 
     if (battleLogs.length > 0) {
+        console.log(battleLogs);
         for (let element of battleLogs) {
             battleLog.appendChild(element);
         }
     }
     gs.appendChild(battleLog);
 
+}
+
+function showReturnToTownButton() {
+    let returnToTownButton = document.createElement("button");
+    returnToTownButton.innerText = "🏘️ Return to town";
+    returnToTownButton.id = "return-to-town-button";
+    returnToTownButton.setAttribute("onclick", "clearGameSpace(); showMainScreen();");
+    gs.appendChild(returnToTownButton);
 }
 
 function battleTurn() {
@@ -157,10 +170,9 @@ function battleTurn() {
             if (lootItems.length == 0) {
                 lootItems.push("nothing")
             }
+            showReturnToTownButton();
             alert(`Battle over! You won, yay!! 🎉\nFound: ${lootItems.join(', ')}`);
         }
-        clearGameSpace();
-        showMainScreen();
     } else {
         setTimeout(battleTurn, 1000);
     }
@@ -226,6 +238,20 @@ function getFinalDamage(damagePotential, target) {
     return damage
 }
 
+function nameAndSymbol(enemy) {
+    return enemy.symbol + " " + enemy.name;
+}
+
+function logDamage(damage, toEnemy = true) {
+    let damageLog = document.createElement("p");
+    if (toEnemy) {
+        damageLog.innerText = `You hit the ${nameAndSymbol(currentEnemy)} for ${damage} damage.`;
+    } else {
+        damageLog.innerText = `The ${nameAndSymbol(currentEnemy)} hit you for ${damage} damage.`;
+    }
+    battleLogs.push(damageLog);
+}
+
 function calculateBattleTurn() {
     let characterDamagePotential = getCharacterDamagePotential();
     let enemyDamagePotential = getEnemyDamagePotential();
@@ -233,11 +259,20 @@ function calculateBattleTurn() {
     let damageToEnemy = getFinalDamage(characterDamagePotential, target = "enemy");
     let damageToCharacter = getFinalDamage(enemyDamagePotential, target = "character");
 
-    character.currentHealth -= damageToCharacter;
+    // Damage to character
+    if (damageToCharacter > 0) {
+        character.currentHealth -= damageToCharacter;
+        logDamage(damageToCharacter, toEnemy = false);
+    }
     if (character.currentHealth < 0) {
         character.currentHealth = 0;
     }
-    currentEnemy.currentHealth -= damageToEnemy;
+
+    // Damage to enemy
+    if (damageToEnemy > 0) {
+        currentEnemy.currentHealth -= damageToEnemy;
+        logDamage(damageToEnemy, toEnemy = true);
+    }
     if (currentEnemy.currentHealth < 0) {
         currentEnemy.currentHealth = 0;
     }
