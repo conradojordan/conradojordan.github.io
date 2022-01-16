@@ -12,7 +12,6 @@ const all_items = [
         name: "Small Knife",
         type: "weapon",
         attack: 5,
-        defense: 0,
         value: 10
     },
     {
@@ -20,7 +19,6 @@ const all_items = [
         name: "Diego's Club",
         type: "weapon",
         attack: 6,
-        defense: 0,
         value: 15
     },
     {
@@ -28,14 +26,12 @@ const all_items = [
         name: "Katana",
         type: "weapon",
         attack: 8,
-        defense: 0,
         value: 25
     },
     {
         id: 2000,
         name: "Wooden Shield",
         type: "shield",
-        attack: 0,
         defense: 10,
         value: 10
     },
@@ -43,7 +39,6 @@ const all_items = [
         id: 2001,
         name: "Iron Shield",
         type: "shield",
-        attack: 0,
         defense: 13,
         value: 18
     },
@@ -51,7 +46,6 @@ const all_items = [
         id: 2002,
         name: "Shield of Dispute",
         type: "shield",
-        attack: 0,
         defense: 15,
         value: 30
     },

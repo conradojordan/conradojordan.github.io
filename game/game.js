@@ -24,7 +24,6 @@ function resetCharacter() {
             name: "Small Knife",
             type: "weapon",
             attack: 5,
-            defense: 0,
             value: 5
         },
         equippedShield: {},
@@ -400,8 +399,11 @@ function createBackpackItemElement(itemReference) {
     if (itemReference.quantity > 1) {
         itemText += "s";
     }
-    if (item.attack || item.defense) {
-        itemText += ` (atk: ${item.attack}, def: ${item.defense})`;
+    if (item.attack) {
+        itemText += ` (atk: ${item.attack})`;
+    }
+    if (item.defense) {
+        itemText += ` (def: ${item.defense})`;
     }
     itemElement.innerText = itemText;
     return itemElement;
