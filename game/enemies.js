@@ -7,7 +7,7 @@ const all_enemies = [
         symbol: "🐀",
         maxHealth: 10,
         strength: 10,
-        resilience: 10,
+        resilience: 11,
         experience: 5,
         loot: [
             {
