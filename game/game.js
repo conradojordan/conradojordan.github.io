@@ -24,7 +24,8 @@ function resetCharacter() {
             name: "Small Knife",
             type: "weapon",
             attack: 5,
-            defense: 0
+            defense: 0,
+            value: 5
         },
         equippedShield: {},
         gold: 0,
@@ -553,7 +554,7 @@ function showEquippedItems() {
     if (("id" in character.equippedShield) && !(weaponIds.includes(character.equippedShield.id))) {
         let equippedShieldOption = document.createElement("option");
         equippedShieldOption.value = character.equippedShield.id;
-        equippedShieldOption.innerText = `${character.equippedShield.name} (atk: ${character.equippedShield.attack})`;
+        equippedShieldOption.innerText = `${character.equippedShield.name} (def: ${character.equippedShield.defense})`;
         shieldIds.push(character.equippedShield.id);
         characterShields.appendChild(equippedShieldOption);
         equippedShieldOption.setAttribute("selected", "selected");
