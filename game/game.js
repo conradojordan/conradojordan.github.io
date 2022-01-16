@@ -643,7 +643,7 @@ function showHuntShopAndHealButtons() {
     gs.appendChild(shopButton);
 
     let healButton = document.createElement("button");
-    healButton.innerText = "🏥 Heal";
+    healButton.innerText = "🩹 Heal";
     healButton.id = "heal-button";
     healButton.setAttribute("onclick", "heal()");
     gs.appendChild(healButton);
