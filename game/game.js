@@ -325,10 +325,18 @@ function showCharacterBackpack() {
     backpackTitle.innerText = "🎒 Backpack";
     backpackSpace.appendChild(backpackTitle);
 
-    for (let itemReference of character.backpack) {
-        let itemElement = createBackpackItemElement(itemReference);
-        backpackSpace.appendChild(itemElement);
+    if (character.backpack.length > 0) {
+        for (let itemReference of character.backpack) {
+            let itemElement = createBackpackItemElement(itemReference);
+            backpackSpace.appendChild(itemElement);
+        }
+    } else {
+        let emptyElement = document.createElement("p");
+        emptyElement.id = "backpack-empty";
+        emptyElement.innerText = "<empty>";
+        backpackSpace.appendChild(emptyElement);
     }
+
     gs.appendChild(backpackSpace);
 }
 

@@ -76,6 +76,10 @@ select {
     margin: 3px;
 }
 
+#backpack-empty {
+    color: gray;
+}
+
 #versus {
     color: rgb(236, 201, 0);
 }
