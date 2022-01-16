@@ -198,13 +198,11 @@ function battleTurn() {
             returnToTown();
         } else {
             let lootItems = calculateBattleLoot();
-            if (lootItems.length == 0) {
-                lootItems.push("nothing")
-            }
+            let lootText = renderLootText(lootItems);
             character.experience += currentEnemy.experience;
             character = calculateLevelAndStats(character);
             showReturnToTownButton();
-            alert(`Battle over! You won, yay!! 🎉\nLoot: ${lootItems.join(', ')}`);
+            alert(`Battle over! You won, yay!! 🎉\nLoot: ${lootText}`);
         }
     } else {
         setTimeout(battleTurn, 1000);
@@ -218,7 +216,8 @@ function calculateBattleLoot() {
         if (lottery <= possibleLoot.chance) {
             let quantity = Math.ceil(Math.random() * possibleLoot.max);
             let item = retrieveItem(possibleLoot.itemId);
-            lootItems.push(item.name);
+            item.quantity = quantity;
+            lootItems.push(item);
 
             if (item.type == "gold") {
                 character.gold += quantity;

@@ -47,6 +47,20 @@ function getBackpackItems(backpack) {
     return items
 }
 
+function renderLootText(lootItems) {
+    if (lootItems.length == 0) return "nothing";
+    let text;
+    let multiple;
+    let texts = [];
+    for (let lootItem of lootItems) {
+        multiple = lootItem.quantity > 1;
+        text = multiple ? `${lootItem.quantity} ` : "a ";
+        text += lootItem.name;
+        if (multiple) text += "s";
+        texts.push(text);
+    }
+    return texts.join(", ");
+}
 
 function travelInTime() {
     alert("It worked!! You are a couple of seconds in the future.")

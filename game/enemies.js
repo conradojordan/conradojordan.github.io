@@ -12,8 +12,13 @@ const all_enemies = [
         loot: [
             {
                 itemId: 1,
-                max: 4,
-                chance: 80
+                max: 1,
+                chance: 100
+            },
+            {
+                itemId: 1000,
+                max: 5,
+                chance: 100
             }
         ]
     },
