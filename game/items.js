@@ -30,9 +30,16 @@ const all_items = [
     },
     {
         id: 1003,
-        name: "Staff of Falerga",
+        name: "Scorpion's Claw",
         type: "weapon",
         attack: 12,
+        value: 120
+    },
+    {
+        id: 1004,
+        name: "Staff of Falerga",
+        type: "weapon",
+        attack: 16,
         value: 180
     },
     {
