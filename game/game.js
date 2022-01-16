@@ -126,7 +126,6 @@ function showBattleLogs() {
     battleLog.appendChild(battleLogTitle);
 
     if (battleLogs.length > 0) {
-        console.log(battleLogs);
         for (let element of battleLogs) {
             battleLog.appendChild(element);
         }
@@ -141,6 +140,18 @@ function showReturnToTownButton() {
     returnToTownButton.id = "return-to-town-button";
     returnToTownButton.setAttribute("onclick", "clearGameSpace(); showMainScreen();");
     gs.appendChild(returnToTownButton);
+}
+
+function calculateLevelAndExp() {
+    character.experience += currentEnemy.experience;
+    if (character.experience >= totalExpForLevel(character.level + 1)) {
+        // TODO: solve case form when character ups more than 1 level
+        character.level += 1;
+        character.maxHealth += 5;
+        character.strength += 2;
+        character.resilience += 2;
+        character.intelligence += 1;
+    }
 }
 
 function battleTurn() {
@@ -170,6 +181,7 @@ function battleTurn() {
             if (lootItems.length == 0) {
                 lootItems.push("nothing")
             }
+            calculateLevelAndExp();
             showReturnToTownButton();
             alert(`Battle over! You won, yay!! 🎉\nFound: ${lootItems.join(', ')}`);
         }
