@@ -29,6 +29,13 @@ const all_items = [
         value: 25
     },
     {
+        id: 1003,
+        name: "Staff of Falerga",
+        type: "weapon",
+        attack: 12,
+        value: 180
+    },
+    {
         id: 2000,
         name: "Wooden Shield",
         type: "shield",
