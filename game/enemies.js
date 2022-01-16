@@ -33,14 +33,14 @@ const all_enemies = [
         name: "Snake",
         symbol: "🐍",
         maxHealth: 20,
-        strength: 11,
+        strength: 12,
         resilience: 11,
         experience: 15,
         loot: [
             {
                 itemId: 1,
                 max: 10,
-                chance: 70
+                chance: 30
             }
         ]
     },
