@@ -2,6 +2,7 @@ let characterName = "Dumbass";
 let character;
 let currentEnemy = {};
 let battleLogs = []
+let battleTurnTimeout;
 
 
 // Main game space (global)
@@ -167,17 +168,52 @@ function calculateLevelAndStats(character) {
     return character;
 }
 
-function deathPenalty(character) {
-    character.experience = Math.round(character.experience*0.9);
-    character.gold = 0;
-    return character;
+function showRunAwayButton(parent) {
+    let runAwayButton = document.createElement("button");
+    runAwayButton.innerText = "🏃 Run away";
+    runAwayButton.id = "run-away-button";
+    runAwayButton.setAttribute("onclick", "attemptToRun();");
+    parent.appendChild(runAwayButton);
 }
 
-function battleTurn() {
-    calculateBattleTurn();
+function removeRunAwayButton() {
+    let runAwayButton = document.getElementById("run-away-button");
+    runAwayButton.remove();
+}
+
+function attemptToRun() {
+    clearTimeout(battleTurnTimeout);
+    let enemyDamagePotential = getEnemyDamagePotential();
+    let totalDamage = 0;
+    for (let i=0; i<10; i++) {
+        let damageToCharacter = getFinalDamage(enemyDamagePotential, target = "character");
+        totalDamage += damageToCharacter;
+    }
+    // Damage to character
+    if (totalDamage > 0) {
+        character.currentHealth -= totalDamage;
+        logDamage(totalDamage, toEnemy = false);
+    }
+    if (character.currentHealth <= 0) {
+        character.currentHealth = 0;
+        alert(`While attempting to run, the ${nameAndSymbol(currentEnemy)} caught you and you fell in battle 💀\nYou lost 10% of your total experience and all of your gold.`)
+        character = calculateLevelAndStats(deathPenalty(character));
+    } else {
+        alert(`You succesfully ran away, but the ${nameAndSymbol(currentEnemy)} hit you for more ${totalDamage} damage`);
+    }
+    returnToTown();
+}
+
+function showBattleInformation(battleOver=false) {
     clearGameSpace();
     showNameLevelAndExp();
     showCharacterInfo();
+
+    if (battleOver){
+        showReturnToTownButton();
+    } else {
+        showRunAwayButton(gs);
+    }
 
     insertLineBreak(gs, 1);
 
@@ -190,10 +226,16 @@ function battleTurn() {
     showEnemyInformation();
 
     showBattleLogs();
+}
+
+function battleTurn() {
+    calculateBattleTurn();
+
+    showBattleInformation();
 
     if (character.currentHealth == 0 || currentEnemy.currentHealth == 0) {
         if (character.currentHealth == 0) {
-            alert(`Battle over!! The ${nameAndSymbol(currentEnemy)} won 💀\nYou have lost 10% of your total experience and all your gold.`);
+            alert(`Battle over!! The ${nameAndSymbol(currentEnemy)} won 💀\nYou lost 10% of your total experience and all of your gold.`);
             character = calculateLevelAndStats(deathPenalty(character));
             returnToTown();
         } else {
@@ -201,11 +243,12 @@ function battleTurn() {
             let lootText = renderLootText(lootItems);
             character.experience += currentEnemy.experience;
             character = calculateLevelAndStats(character);
-            showReturnToTownButton();
-            alert(`Battle over! You won, yay!! 🎉\nLoot: ${lootText}`);
+            logBattleInfo("\n\nBattle over! You won, yay!! 🎉");
+            logBattleInfo(`The ${nameAndSymbol(currentEnemy)} loot was: ${lootText}`);
+            showBattleInformation(battleOver=true);
         }
     } else {
-        setTimeout(battleTurn, 1000);
+        battleTurnTimeout = setTimeout(battleTurn, 1000);
     }
 }
 
@@ -270,14 +313,20 @@ function getFinalDamage(damagePotential, target) {
     return damage
 }
 
+function logBattleInfo(text) {
+    let battleLog = document.createElement("p");
+    battleLog.innerText = text;
+    battleLogs.push(battleLog);
+}
+
 function logDamage(damage, toEnemy = true) {
-    let damageLog = document.createElement("p");
+    let text;
     if (toEnemy) {
-        damageLog.innerText = `You hit the ${nameAndSymbol(currentEnemy)} for ${damage} damage.`;
+        text = `You hit the ${nameAndSymbol(currentEnemy)} for ${damage} damage.`;
     } else {
-        damageLog.innerText = `The ${nameAndSymbol(currentEnemy)} hit you for ${damage} damage.`;
+        text = `The ${nameAndSymbol(currentEnemy)} hit you for ${damage} damage.`;
     }
-    battleLogs.push(damageLog);
+    logBattleInfo(text);
 }
 
 function calculateBattleTurn() {
