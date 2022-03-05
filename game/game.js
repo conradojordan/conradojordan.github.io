@@ -1,7 +1,7 @@
 let characterName = "Dumbass";
 let character;
 let currentEnemy = {};
-let battleLogs = []
+let battleLogs = [];
 let battleTurnTimeout;
 
 
