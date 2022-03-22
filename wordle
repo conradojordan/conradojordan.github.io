@@ -11,7 +11,7 @@
     <h2 id="chosen-word"></h2>
     <a href="https://www.nytimes.com/games/wordle/index.html">Go to Wordle</a>
 
-    <script src="seedrandom.min.js"></script>
-    <script src="wordle.js"></script>
+    <script src="assets/js/seedrandom.min.js"></script>
+    <script src="assets/js/wordle.js"></script>
 </body>
 </html>
