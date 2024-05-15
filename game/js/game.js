@@ -694,8 +694,8 @@ function showHuntShopAndHealButtons() {
 }
 
 function returnToTown() {
-    setCookie("characterName", character.name, 5000);
-    setCookie("character", JSON.stringify(character), 5000);
+    setData("characterName", character.name);
+    setData("character", character);
     clearGameSpace();
     showMainScreen();
 }
@@ -713,13 +713,13 @@ function showMainScreen() {
 }
 
 function newGame() {
-    characterName = getCookie("characterName");
-    cookieCharacter = getCookie("character");
+    characterName = getData("characterName");
+    persistedCharacter = getData("character");
 
-    if (cookieCharacter == "") {
+    if (!persistedCharacter) {
         showGetNameScreen();
     } else {
-        character = JSON.parse(cookieCharacter);
+        character = persistedCharacter;
         returnToTown();
     }
 }
