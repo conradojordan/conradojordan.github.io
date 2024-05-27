@@ -11,9 +11,10 @@ const all_enemies = [
         experience: 10,
         loot: [
             {
+                // Gold
                 itemId: 1,
                 max: 3,
-                chance: 80
+                chance: 90
             },
             {   // Small Knife
                 itemId: 1000,
@@ -33,14 +34,15 @@ const all_enemies = [
         name: "Snake",
         symbol: "🐍",
         maxHealth: 20,
-        strength: 12,
+        strength: 13,
         resilience: 11,
         experience: 15,
         loot: [
             {
+                // Gold
                 itemId: 1,
-                max: 10,
-                chance: 30
+                max: 7,
+                chance: 65
             },
             {   // Wooden Shield
                 itemId: 2000,
@@ -55,13 +57,14 @@ const all_enemies = [
         name: "Bat",
         symbol: "🦇",
         maxHealth: 30,
-        strength: 13,
+        strength: 14,
         resilience: 12,
         experience: 30,
         loot: [
             {
+                // Gold
                 itemId: 1,
-                max: 14,
+                max: 10,
                 chance: 70
             },
             {   // Katana
@@ -77,13 +80,14 @@ const all_enemies = [
         name: "Evil caterpillar",
         symbol: "🐛",
         maxHealth: 60,
-        strength: 14,
+        strength: 15,
         resilience: 14,
         experience: 80,
         loot: [
             {
+                // Gold
                 itemId: 1,
-                max: 18,
+                max: 12,
                 chance: 50
             },
             {   // Iron Shield
@@ -104,14 +108,15 @@ const all_enemies = [
         name: "Scorpion",
         symbol: "🦂",
         maxHealth: 80,
-        strength: 16,
+        strength: 17,
         resilience: 14,
         experience: 80,
         loot: [
             {
+                // Gold
                 itemId: 1,
-                max: 18,
-                chance: 50
+                max: 14,
+                chance: 70
             },
             {   // Scorpion's Claw
                 itemId: 1003,
@@ -131,6 +136,7 @@ const all_enemies = [
         experience: 100,
         loot: [
             {
+                // Gold
                 itemId: 1,
                 max: 50,
                 chance: 80
