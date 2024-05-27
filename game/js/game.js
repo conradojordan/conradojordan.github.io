@@ -111,19 +111,21 @@ function showBattleButton() {
     gs.appendChild(battleButton);
 }
 
-function startBattle() {
+function startBattle(sameEnemy = false) {
     battleLogs = [];
     currentBattleClock = 0;
     let battleStarted = document.createElement("p");
     battleStarted.innerText = "The battle has started!";
     battleLogs.push(battleStarted);
 
-    let chooseEnemies = document.getElementById("choose-enemies");
-    let chosenEnemyId = chooseEnemies.value;
+    if (!sameEnemy) {
+        let chooseEnemies = document.getElementById("choose-enemies");
+        let chosenEnemyId = chooseEnemies.value;
+        let enemy = all_enemies.filter(en => en.id == chosenEnemyId)[0];
+        // Clone enemy and set as currentEnemy (global variable)
+        currentEnemy = JSON.parse(JSON.stringify(enemy));
+    }
 
-    let enemy = all_enemies.filter(en => en.id == chosenEnemyId)[0];
-    // Clone enemy and set as currentEnemy (global variable)
-    currentEnemy = JSON.parse(JSON.stringify(enemy));
     currentEnemy.currentHealth = currentEnemy.maxHealth;
     battleTurn();
 }
@@ -152,6 +154,14 @@ function showReturnToTownButton() {
     returnToTownButton.id = "return-to-town-button";
     returnToTownButton.setAttribute("onclick", "returnToTown();");
     gs.appendChild(returnToTownButton);
+}
+
+function showBattleAgainButton() {
+    let battleAgainButton = document.createElement("button");
+    battleAgainButton.innerText = "⚔️ Battle again!";
+    battleAgainButton.id = "battle-again-button";
+    battleAgainButton.setAttribute("onclick", "startBattle(sameEnemy = true);");
+    gs.appendChild(battleAgainButton);
 }
 
 function calculateLevelAndStats(character) {
@@ -214,6 +224,7 @@ function showBattleInformation(battleOver = false) {
 
     if (battleOver) {
         showReturnToTownButton();
+        showBattleAgainButton();
     } else {
         showRunAwayButton(gs);
     }
