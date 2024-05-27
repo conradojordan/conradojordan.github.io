@@ -3,6 +3,8 @@ let character;
 let currentEnemy = {};
 let battleLogs = [];
 let battleTurnTimeout;
+let battleClocks = ["🕛", "🕒", "🕕", "🕘"]
+let currentBattleClock = 0;
 
 
 // Main game space (global)
@@ -111,6 +113,7 @@ function showBattleButton() {
 
 function startBattle() {
     battleLogs = [];
+    currentBattleClock = 0;
     let battleStarted = document.createElement("p");
     battleStarted.innerText = "The battle has started!";
     battleLogs.push(battleStarted);
@@ -131,7 +134,8 @@ function showBattleLogs() {
 
     let battleLogTitle = document.createElement("h3");
     battleLogTitle.id = "battle-log-title";
-    battleLogTitle.innerText = "Battle logs";
+    battleLogTitle.innerText = `Battle logs ${battleClocks[currentBattleClock]}`;
+    currentBattleClock = (currentBattleClock + 1) % 4;
     battleLog.appendChild(battleLogTitle);
 
     if (battleLogs.length > 0) {
@@ -140,7 +144,6 @@ function showBattleLogs() {
         }
     }
     gs.appendChild(battleLog);
-
 }
 
 function showReturnToTownButton() {
@@ -156,10 +159,10 @@ function calculateLevelAndStats(character) {
     let levelChanged = calculatedLevel != character.level;
 
     character.level = calculatedLevel;
-    character.maxHealth = (character.level-1)*5 + 20;
-    character.strength = (character.level-1)*2 + 10;
-    character.resilience = (character.level-1)*2 + 10;
-    character.intelligence = (character.level-1)*1 + 5;
+    character.maxHealth = (character.level - 1) * 5 + 20;
+    character.strength = (character.level - 1) * 2 + 10;
+    character.resilience = (character.level - 1) * 2 + 10;
+    character.intelligence = (character.level - 1) * 1 + 5;
 
     if (levelChanged) {
         // Character died or grew in level, both should restore life
@@ -185,7 +188,7 @@ function attemptToRun() {
     clearTimeout(battleTurnTimeout);
     let enemyDamagePotential = getEnemyDamagePotential();
     let totalDamage = 0;
-    for (let i=0; i<10; i++) {
+    for (let i = 0; i < 10; i++) {
         let damageToCharacter = getFinalDamage(enemyDamagePotential, target = "character");
         totalDamage += damageToCharacter;
     }
@@ -197,19 +200,19 @@ function attemptToRun() {
     if (character.currentHealth <= 0) {
         character.currentHealth = 0;
         alert(`While attempting to run, the ${nameAndSymbol(currentEnemy)} caught you and you fell in battle 💀\nYou lost 10% of your total experience and all of your gold.`)
-        character = calculateLevelAndStats(deathPenalty(character));
+        character = calculateLevelAndStats(applyDeathPenalty(character));
     } else {
         alert(`You succesfully ran away, but the ${nameAndSymbol(currentEnemy)} hit you for more ${totalDamage} damage`);
     }
     returnToTown();
 }
 
-function showBattleInformation(battleOver=false) {
+function showBattleInformation(battleOver = false) {
     clearGameSpace();
     showNameLevelAndExp();
     showCharacterInfo();
 
-    if (battleOver){
+    if (battleOver) {
         showReturnToTownButton();
     } else {
         showRunAwayButton(gs);
@@ -219,7 +222,7 @@ function showBattleInformation(battleOver=false) {
 
     // VERSUS
     let versus = document.createElement("h2");
-    versus.innerText = "VS.";
+    versus.innerText = `${character.name} vs. ${nameAndSymbol(currentEnemy)}`;
     versus.id = "versus"
     gs.appendChild(versus);
 
@@ -236,7 +239,7 @@ function battleTurn() {
     if (character.currentHealth == 0 || currentEnemy.currentHealth == 0) {
         if (character.currentHealth == 0) {
             alert(`Battle over!! The ${nameAndSymbol(currentEnemy)} won 💀\nYou lost 10% of your total experience and all of your gold.`);
-            character = calculateLevelAndStats(deathPenalty(character));
+            character = calculateLevelAndStats(applyDeathPenalty(character));
             returnToTown();
         } else {
             let lootItems = calculateBattleLoot();
@@ -245,7 +248,7 @@ function battleTurn() {
             character = calculateLevelAndStats(character);
             logBattleInfo("\n\nBattle over! You won, yay!! 🎉");
             logBattleInfo(`The ${nameAndSymbol(currentEnemy)} loot was: ${lootText}`);
-            showBattleInformation(battleOver=true);
+            showBattleInformation(battleOver = true);
         }
     } else {
         battleTurnTimeout = setTimeout(battleTurn, 1000);
@@ -356,12 +359,8 @@ function calculateBattleTurn() {
 }
 
 function showEnemyInformation() {
-    let enemyName = document.createElement("h3");
-    enemyName.innerText = `${currentEnemy.symbol} ${currentEnemy.name}`;
-    gs.appendChild(enemyName);
-
     let enemyHealth = document.createElement("p");
-    enemyHealth.innerHTML = `Health: <span style="color:${getHealthColor(currentEnemy.currentHealth, currentEnemy.maxHealth)};">${currentEnemy.currentHealth}</span> / ${currentEnemy.maxHealth}`;
+    enemyHealth.innerHTML = `Enemy health: <span style="color:${getHealthColor(currentEnemy.currentHealth, currentEnemy.maxHealth)};">${currentEnemy.currentHealth}</span> / ${currentEnemy.maxHealth}`;
     gs.appendChild(enemyHealth);
 }
 

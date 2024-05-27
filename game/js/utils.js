@@ -32,8 +32,8 @@ function expForNextLevel(exp, level) {
     return totalExpForLevel(level + 1) - exp
 }
 
-function deathPenalty(character) {
-    character.experience = Math.round(character.experience*0.9);
+function applyDeathPenalty(character) {
+    character.experience = Math.round(character.experience * 0.9);
     character.gold = 0;
     character.currentHealth = character.maxHealth;
     return character;
