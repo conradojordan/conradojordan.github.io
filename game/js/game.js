@@ -607,6 +607,7 @@ function showEquippedItems() {
     }
 
     let weapons = backpackItems.filter(item => item.type == "weapon");
+    weapons.sort((a, b) => b.attack - a.attack);
     // Add backpack weapons to select
     for (let weapon of weapons) {
         if (weaponIds.includes(weapon.id)) {
@@ -654,6 +655,7 @@ function showEquippedItems() {
 
     // Add backpack shields to select
     let shields = backpackItems.filter(item => item.type == "shield");
+    shields.sort((a, b) => b.defense - a.defense);
     for (let shield of shields) {
         if (shieldIds.includes(shield.id)) {
             continue;
@@ -664,7 +666,6 @@ function showEquippedItems() {
         shieldOption.innerText = `${shield.name} (def: ${shield.defense})`;
         characterShields.appendChild(shieldOption);
     }
-
     equippedItems.appendChild(characterShields);
 
     gs.appendChild(equippedItems);
