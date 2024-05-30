@@ -4,6 +4,16 @@ let currentEnemy = {};
 let battleLogs = [];
 let battleTurnTimeout;
 
+const BASE_CHARACTER_ACCURACY = 0.9
+const BASE_ENEMY_ACCURACY = 0.8
+
+const INITIAL_HEALTH = 50
+const INITIAL_STRENGTH = 10
+const INITIAL_INTELLIGENCE = 5
+const HEALTH_GAIN_PER_LEVEL = 5
+const STRENGTH_GAIN_PER_LEVEL = 2
+const INTELLIGENCE_GAIN_PER_LEVEL = 1
+
 const BATTLE_CLOCKS = ["🕛", "🕒", "🕕", "🕘"]
 let currentBattleClock = 0;
 
@@ -18,16 +28,15 @@ function createCharacter() {
         name: characterName,
         level: 1,
         experience: 0,
-        strength: 10,
-        resilience: 10,
-        intelligence: 5,
-        currentHealth: 20,
-        maxHealth: 20,
+        strength: INITIAL_STRENGTH,
+        intelligence: INITIAL_INTELLIGENCE,
+        currentHealth: INITIAL_HEALTH,
+        maxHealth: INITIAL_HEALTH,
         equippedWeapon: {
             id: 1000,
             name: "Small Knife",
             type: "weapon",
-            attack: 5,
+            attack: 2,
             value: 5
         },
         equippedShield: {},
@@ -170,10 +179,9 @@ function calculateLevelAndStats(character) {
     let levelChanged = calculatedLevel != character.level;
 
     character.level = calculatedLevel;
-    character.maxHealth = (character.level - 1) * 5 + 20;
-    character.strength = (character.level - 1) * 2 + 10;
-    character.resilience = (character.level - 1) * 2 + 10;
-    character.intelligence = (character.level - 1) * 1 + 5;
+    character.maxHealth = (character.level - 1) * HEALTH_GAIN_PER_LEVEL + INITIAL_HEALTH;
+    character.strength = (character.level - 1) * STRENGTH_GAIN_PER_LEVEL + INITIAL_STRENGTH;
+    character.intelligence = (character.level - 1) * INTELLIGENCE_GAIN_PER_LEVEL + INITIAL_INTELLIGENCE;
 
     if (levelChanged) {
         // Character died or grew in level, both should restore life
@@ -197,10 +205,9 @@ function removeRunAwayButton() {
 
 function attemptToRun() {
     clearTimeout(battleTurnTimeout);
-    let enemyDamagePotential = getEnemyDamagePotential();
     let totalDamage = 0;
     for (let i = 0; i < 10; i++) {
-        let damageToCharacter = getFinalDamage(enemyDamagePotential, target = "character");
+        let damageToCharacter = calculateDamageToCharacter();
         totalDamage += damageToCharacter;
     }
     // Damage to character
@@ -257,10 +264,14 @@ function battleTurn() {
             let lootItems = calculateBattleLoot();
             let lootText = renderLootText(lootItems);
             character.experience += currentEnemy.experience;
+            previousLevel = character.level
             character = calculateLevelAndStats(character);
             logBattleInfo("\n\nBattle over! You won, yay!! 🎉");
             logBattleInfo(`The ${nameAndSymbol(currentEnemy)} loot was: ${lootText}`);
             showBattleInformation(battleOver = true);
+            if (character.level > previousLevel) {
+                alert(`You advanced to level ${character.level}!`)
+            }
         }
     } else {
         battleTurnTimeout = setTimeout(battleTurn, 1000);
@@ -287,45 +298,44 @@ function calculateBattleLoot() {
     return lootItems;
 }
 
-function getCharacterDamagePotential() {
-    let characterEffectivePower = (0.3 * character.strength);
+function getCharacterPower() {
+    let characterPower = 3 * character.level;
     if ("attack" in character.equippedWeapon) {
-        characterEffectivePower += (0.3 * character.equippedWeapon.attack);
+        characterPower += (2 * character.equippedWeapon.attack);
     }
-    let characterDamagePotential = (character.level / 5) + characterEffectivePower;
-    return characterDamagePotential
+    return characterPower
 }
 
-function getEnemyDamagePotential() {
-    let enemyDamagePotential = (currentEnemy.level / 5) + (0.3 * currentEnemy.strength);
-    return enemyDamagePotential
-}
-
-function getCharacterEffectiveDefense() {
-    let characterEffectiveDefense = (0.4 * character.resilience);
+function getCharacterDefense() {
+    let defense = character.level * 2;
     if ("defense" in character.equippedShield) {
-        characterEffectiveDefense += (0.1 * character.equippedShield.defense);
+        defense += character.equippedShield.defense;
     }
-    return characterEffectiveDefense
+    return defense
 }
 
-function getFinalDamage(damagePotential, target) {
-    let damage = damagePotential * normalDistribution(1, 0.4);
-    let strength = target == "enemy" ? character.strength : currentEnemy.strength;
-    let tenPercentOfStrength = strength * 0.1;
-    damage += Math.random() * 2 * tenPercentOfStrength - tenPercentOfStrength;
+function getEnemyPower() {
+    return 3 * currentEnemy.level + 2 * currentEnemy.attack
+}
 
-    let resilience = target == "enemy" ? currentEnemy.resilience : character.resilience;
-    let defense = 0.4 * resilience;
+function getEnemyDefense() {
+    return currentEnemy.level * 2 + currentEnemy.defense
+}
 
-    if (target == "character" && "defense" in character.equippedShield) {
-        defense += (0.1 * character.equippedShield.defense);
-    }
-    damage = Math.round(damage - defense);
-    if (damage < 0) {
-        damage = 0;
-    }
-    return damage
+function calculateDamageToEnemy() {
+    power = getCharacterPower()
+    damage = normalDistribution(power, 0.1 * power)
+    enemy_defense = getEnemyDefense()
+    console.log(`Your power: ${power}, your damage: ${damage}, enemy defense: ${enemy_defense}`)
+    return Math.round(damage - enemy_defense)
+}
+
+function calculateDamageToCharacter() {
+    power = getEnemyPower()
+    damage = normalDistribution(power, 0.1 * power)
+    character_defense = getCharacterDefense()
+    console.log(`Enemy power: ${power}, enemy damage: ${damage}, your defense: ${character_defense}\n`)
+    return Math.round(damage - character_defense)
 }
 
 function logBattleInfo(text) {
@@ -345,25 +355,37 @@ function logDamage(damage, toEnemy = true) {
 }
 
 function calculateBattleTurn() {
-    let characterDamagePotential = getCharacterDamagePotential();
-    let enemyDamagePotential = getEnemyDamagePotential();
+    // Your attack
+    if (Math.random() <= BASE_CHARACTER_ACCURACY) {
+        // You hit your attack
+        let damageToEnemy = calculateDamageToEnemy();
 
-    let damageToEnemy = getFinalDamage(characterDamagePotential, target = "enemy");
-    let damageToCharacter = getFinalDamage(enemyDamagePotential, target = "character");
-
-    // Damage to character
-    if (damageToCharacter > 0) {
-        character.currentHealth -= damageToCharacter;
-        logDamage(damageToCharacter, toEnemy = false);
+        if (damageToEnemy > 0) {
+            currentEnemy.currentHealth -= damageToEnemy;
+            logDamage(damageToEnemy, toEnemy = true);
+        }
+    } else {
+        // You miss your attack
+        logBattleInfo("You miss your attack!");
     }
+
+    // Enemy's attack
+    if (Math.random() <= BASE_ENEMY_ACCURACY) {
+        // It hits you
+        let damageToCharacter = calculateDamageToCharacter();
+
+        if (damageToCharacter > 0) {
+            character.currentHealth -= damageToCharacter;
+            logDamage(damageToCharacter, toEnemy = false);
+        }
+    } else {
+        // It misses
+        logBattleInfo("The enemy misses their attack!");
+    }
+
+    // Health can't reach negative
     if (character.currentHealth < 0) {
         character.currentHealth = 0;
-    }
-
-    // Damage to enemy
-    if (damageToEnemy > 0) {
-        currentEnemy.currentHealth -= damageToEnemy;
-        logDamage(damageToEnemy, toEnemy = true);
     }
     if (currentEnemy.currentHealth < 0) {
         currentEnemy.currentHealth = 0;
@@ -437,12 +459,6 @@ function showCharacterInfo() {
     let characterStrength = document.createElement("p");
     characterStrength.innerText = `💪 Strength: ${character.strength}`;
     characterInfo.appendChild(characterStrength);
-
-
-    // Character resilience
-    let characterResilience = document.createElement("p");
-    characterResilience.innerText = `✊ Resilience: ${character.resilience}`;
-    characterInfo.appendChild(characterResilience);
 
     // Character intelligence
     let characterIntelligence = document.createElement("p");

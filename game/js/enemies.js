@@ -6,17 +6,17 @@ const all_enemies = [
         name: "Rat",
         symbol: "🐀",
         maxHealth: 10,
-        strength: 10,
-        resilience: 11,
+        attack: 1,
+        defense: 2,
         experience: 10,
         loot: [
             {
                 // Gold
                 itemId: 1,
-                max: 3,
+                max: 5,
                 chance: 90
             },
-            {   // Small Knife
+            {   // Short Sword
                 itemId: 1000,
                 max: 1,
                 chance: 15
@@ -24,7 +24,7 @@ const all_enemies = [
             {   // Diego's Club
                 itemId: 1001,
                 max: 1,
-                chance: 5
+                chance: 4
             }
         ]
     },
@@ -34,15 +34,15 @@ const all_enemies = [
         name: "Snake",
         symbol: "🐍",
         maxHealth: 20,
-        strength: 13,
-        resilience: 11,
-        experience: 15,
+        attack: 2,
+        defense: 3,
+        experience: 20,
         loot: [
             {
                 // Gold
                 itemId: 1,
-                max: 7,
-                chance: 65
+                max: 10,
+                chance: 60
             },
             {   // Wooden Shield
                 itemId: 2000,
@@ -57,14 +57,14 @@ const all_enemies = [
         name: "Bat",
         symbol: "🦇",
         maxHealth: 30,
-        strength: 14,
-        resilience: 12,
+        attack: 4,
+        defense: 3,
         experience: 30,
         loot: [
             {
                 // Gold
                 itemId: 1,
-                max: 10,
+                max: 15,
                 chance: 70
             },
             {   // Katana
@@ -80,8 +80,8 @@ const all_enemies = [
         name: "Evil caterpillar",
         symbol: "🐛",
         maxHealth: 60,
-        strength: 15,
-        resilience: 14,
+        attack: 4,
+        defense: 6,
         experience: 80,
         loot: [
             {
@@ -98,7 +98,7 @@ const all_enemies = [
             {   // Staff of Falerga
                 itemId: 1004,
                 max: 1,
-                chance: 7
+                chance: 3
             }
         ]
     },
@@ -108,9 +108,9 @@ const all_enemies = [
         name: "Scorpion",
         symbol: "🦂",
         maxHealth: 80,
-        strength: 17,
-        resilience: 14,
-        experience: 80,
+        attack: 7,
+        defense: 7,
+        experience: 100,
         loot: [
             {
                 // Gold
@@ -131,8 +131,8 @@ const all_enemies = [
         name: "Dragon",
         symbol: "🐉",
         maxHealth: 500,
-        strength: 30,
-        resilience: 30,
+        attack: 30,
+        defense: 30,
         experience: 100,
         loot: [
             {
