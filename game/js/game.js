@@ -529,19 +529,32 @@ function removeFromBackpack(itemId, quantity) {
     }
 }
 
+function unequipWeapon() {
+    if ("id" in character.equippedWeapon) {
+        addToBackpack(character.equippedWeapon.id, 1);
+        character.equippedWeapon = {};
+    }
+}
+
+function unequipShield() {
+    if ("id" in character.equippedShield) {
+        addToBackpack(character.equippedShield.id, 1);
+        character.equippedShield = {};
+    }
+}
+
 function equipItem(itemType) {
     let elementId = itemType == "weapon" ? "character-weapons" : "character-shields"
     let characterItems = document.getElementById(elementId);
     chosenItemId = characterItems.value
-    if (chosenItemId == "0") {
-        if (itemType == "weapon") {
-            addToBackpack(character.equippedWeapon.id, 1);
-            character.equippedWeapon = {};
-        } else {
-            addToBackpack(character.equippedShield.id, 1);
-            character.equippedShield = {};
-        }
+
+    if (itemType == "weapon") {
+        unequipWeapon()
     } else {
+        unequipShield()
+    }
+
+    if (chosenItemId != "0") {
         if (itemType == "weapon") {
             character.equippedWeapon = retrieveItem(chosenItemId);
         } else {
@@ -549,6 +562,7 @@ function equipItem(itemType) {
         }
         removeFromBackpack(chosenItemId, 1);
     }
+
     returnToTown();
 }
 
