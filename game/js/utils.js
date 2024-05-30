@@ -1,6 +1,6 @@
 function getHealthColor(currentHealth, maxHealth) {
-    if (currentHealth / maxHealth > 0.7) return "green";
-    else if (currentHealth / maxHealth < 0.3) return "red";
+    if (currentHealth / maxHealth > 0.6) return "green";
+    else if (currentHealth / maxHealth < 0.2) return "red";
     else return "goldenrod";
 }
 
@@ -40,7 +40,7 @@ function applyDeathPenalty(character) {
 }
 
 function retrieveItem(id) {
-    return all_items.filter(item => item.id == id)[0];
+    return ALL_ITEMS.filter(item => item.id == id)[0];
 }
 
 function getBackpackItems(backpack) {

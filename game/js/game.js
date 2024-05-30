@@ -3,7 +3,8 @@ let character;
 let currentEnemy = {};
 let battleLogs = [];
 let battleTurnTimeout;
-let battleClocks = ["🕛", "🕒", "🕕", "🕘"]
+
+const BATTLE_CLOCKS = ["🕛", "🕒", "🕕", "🕘"]
 let currentBattleClock = 0;
 
 
@@ -12,7 +13,7 @@ let gs = document.getElementById("game-space");
 
 
 // Game functions
-function resetCharacter() {
+function createCharacter() {
     character = {
         name: characterName,
         level: 1,
@@ -57,7 +58,7 @@ function showGetNameScreen() {
 
     let startGameButton = document.createElement("button");
     startGameButton.id = "start-game-button";
-    startGameButton.setAttribute("onclick", "getName(); resetCharacter(); returnToTown();");
+    startGameButton.setAttribute("onclick", "getName(); createCharacter(); returnToTown();");
     startGameButton.innerText = "Start Game!"
     gs.appendChild(startGameButton);
 
@@ -136,7 +137,7 @@ function showBattleLogs() {
 
     let battleLogTitle = document.createElement("h3");
     battleLogTitle.id = "battle-log-title";
-    battleLogTitle.innerText = `Battle logs ${battleClocks[currentBattleClock]}`;
+    battleLogTitle.innerText = `Battle logs ${BATTLE_CLOCKS[currentBattleClock]}`;
     currentBattleClock = (currentBattleClock + 1) % 4;
     battleLog.appendChild(battleLogTitle);
 
@@ -388,7 +389,7 @@ function showNameLevelAndExp() {
     // Name and level
     let characterNameAndLevel = document.createElement("h3");
     characterNameAndLevel.id = "name-and-level";
-    characterNameAndLevel.innerText = `${character.name} - human level ${character.level}`;
+    characterNameAndLevel.innerText = `${character.name} - warrior level ${character.level}`;
     gs.appendChild(characterNameAndLevel);
 
     // Exp text
