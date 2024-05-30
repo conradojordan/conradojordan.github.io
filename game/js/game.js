@@ -151,7 +151,7 @@ function showBattleLogs() {
     battleLog.appendChild(battleLogTitle);
 
     if (battleLogs.length > 0) {
-        for (let element of battleLogs) {
+        for (let element of battleLogs.slice(-10)) {
             battleLog.appendChild(element);
         }
     }
