@@ -36,7 +36,7 @@ function createCharacter() {
             id: 1000,
             name: "Small Knife",
             type: "weapon",
-            attack: 2,
+            attack: 1,
             value: 5
         },
         equippedShield: {},
@@ -299,15 +299,15 @@ function calculateBattleLoot() {
 }
 
 function getCharacterPower() {
-    let characterPower = 3 * character.level;
+    let characterPower = 2 * character.level;
     if ("attack" in character.equippedWeapon) {
-        characterPower += (2 * character.equippedWeapon.attack);
+        characterPower += (3 * character.equippedWeapon.attack);
     }
     return characterPower
 }
 
 function getCharacterDefense() {
-    let defense = character.level * 2;
+    let defense = 3 * character.level + 1;
     if ("defense" in character.equippedShield) {
         defense += character.equippedShield.defense;
     }
@@ -315,26 +315,24 @@ function getCharacterDefense() {
 }
 
 function getEnemyPower() {
-    return 3 * currentEnemy.level + 2 * currentEnemy.attack
+    return 2 * currentEnemy.level + 3 * currentEnemy.attack
 }
 
 function getEnemyDefense() {
-    return currentEnemy.level * 2 + currentEnemy.defense
+    return 2 * currentEnemy.level + currentEnemy.defense
 }
 
 function calculateDamageToEnemy() {
     power = getCharacterPower()
-    damage = normalDistribution(power, 0.1 * power)
+    damage = normalDistribution(power, 0.2 * power)
     enemy_defense = getEnemyDefense()
-    console.log(`Your power: ${power}, your damage: ${damage}, enemy defense: ${enemy_defense}`)
     return Math.round(damage - enemy_defense)
 }
 
 function calculateDamageToCharacter() {
     power = getEnemyPower()
-    damage = normalDistribution(power, 0.1 * power)
+    damage = normalDistribution(power, 0.2 * power)
     character_defense = getCharacterDefense()
-    console.log(`Enemy power: ${power}, enemy damage: ${damage}, your defense: ${character_defense}\n`)
     return Math.round(damage - character_defense)
 }
 

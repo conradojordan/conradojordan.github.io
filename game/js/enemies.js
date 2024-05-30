@@ -7,7 +7,7 @@ const all_enemies = [
         symbol: "🐀",
         maxHealth: 10,
         attack: 1,
-        defense: 2,
+        defense: 1,
         experience: 10,
         loot: [
             {
@@ -17,12 +17,12 @@ const all_enemies = [
                 chance: 90
             },
             {   // Short Sword
-                itemId: 1000,
+                itemId: 1001,
                 max: 1,
                 chance: 15
             },
             {   // Diego's Club
-                itemId: 1001,
+                itemId: 1002,
                 max: 1,
                 chance: 4
             }
@@ -35,7 +35,7 @@ const all_enemies = [
         symbol: "🐍",
         maxHealth: 20,
         attack: 2,
-        defense: 3,
+        defense: 2,
         experience: 20,
         loot: [
             {
@@ -68,7 +68,7 @@ const all_enemies = [
                 chance: 70
             },
             {   // Katana
-                itemId: 1002,
+                itemId: 1003,
                 max: 1,
                 chance: 20
             }
@@ -96,7 +96,7 @@ const all_enemies = [
                 chance: 18
             },
             {   // Staff of Falerga
-                itemId: 1004,
+                itemId: 1005,
                 max: 1,
                 chance: 3
             }
@@ -119,7 +119,7 @@ const all_enemies = [
                 chance: 70
             },
             {   // Scorpion's Claw
-                itemId: 1003,
+                itemId: 1004,
                 max: 1,
                 chance: 10
             }

@@ -12,34 +12,41 @@ const gold = [
 const weapons = [
     {
         id: 1000,
+        name: "Small Knife",
+        type: "weapon",
+        attack: 1,
+        value: 5
+    },
+    {
+        id: 1001,
         name: "Short Sword",
         type: "weapon",
         attack: 2,
         value: 10
     },
     {
-        id: 1001,
+        id: 1002,
         name: "Diego's Club",
         type: "weapon",
         attack: 4,
         value: 20
     },
     {
-        id: 1002,
+        id: 1003,
         name: "Katana",
         type: "weapon",
         attack: 5,
         value: 45
     },
     {
-        id: 1003,
+        id: 1004,
         name: "Scorpion's Claw",
         type: "weapon",
         attack: 8,
         value: 120
     },
     {
-        id: 1004,
+        id: 1005,
         name: "Staff of Falerga",
         type: "weapon",
         attack: 12,
