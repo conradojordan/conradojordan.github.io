@@ -443,7 +443,7 @@ function showCharacterInfo() {
     characterInfo.className = "gray-border";
 
     // Character info title
-    let characterInfoTitle = document.createElement("p");
+    let characterInfoTitle = document.createElement("h3");
     characterInfoTitle.id = "character-info-title";
     characterInfoTitle.innerText = "Character Information";
     characterInfo.appendChild(characterInfoTitle);
@@ -455,7 +455,7 @@ function showCharacterInfo() {
 
     // Character strength
     let characterStrength = document.createElement("p");
-    characterStrength.innerText = `💪 Strength: ${character.strength}`;
+    characterStrength.innerText = `💪🏽 Strength: ${character.strength}`;
     characterInfo.appendChild(characterStrength);
 
     // Character intelligence
@@ -488,7 +488,7 @@ function showCharacterBackpack() {
     backpackSpace.id = "backpack-space";
     backpackSpace.className = "gray-border";
 
-    let backpackTitle = document.createElement("p");
+    let backpackTitle = document.createElement("h3");
     backpackTitle.id = "backpack-title";
     backpackTitle.innerText = "🎒 Backpack";
     backpackSpace.appendChild(backpackTitle);
@@ -570,7 +570,7 @@ function showEquippedItems() {
     equippedItems.id = "equipped-items";
     equippedItems.className = "gray-border";
 
-    let equippedItemsTitle = document.createElement("p");
+    let equippedItemsTitle = document.createElement("h3");
     equippedItemsTitle.id = "equipped-items-title";
     equippedItemsTitle.innerText = "Equipped items"
     equippedItems.appendChild(equippedItemsTitle);
@@ -676,7 +676,7 @@ function showCharacterGold() {
     characterGold.id = "character-gold";
     characterGold.className = "gray-border";
 
-    let characterGoldTitle = document.createElement("p");
+    let characterGoldTitle = document.createElement("h3");
     characterGoldTitle.id = "character-gold-title";
     characterGoldTitle.innerText = "💰 Gold";
     characterGold.appendChild(characterGoldTitle);
