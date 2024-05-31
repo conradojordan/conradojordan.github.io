@@ -693,8 +693,9 @@ function showCharacterGold() {
     gs.appendChild(characterGold);
 }
 
-function shop() {
-    alert("🚧 Shop is currently under construction. Please come back later!");
+function showShop() {
+    clearGameSpace()
+    showReturnToTownButton()
 }
 
 function heal() {
@@ -722,7 +723,7 @@ function showHuntShopAndHealButtons() {
     let shopButton = document.createElement("button");
     shopButton.innerText = "🛒 Shop";
     shopButton.id = "shop-button";
-    shopButton.setAttribute("onclick", "shop()");
+    shopButton.setAttribute("onclick", "showShop()");
     gs.appendChild(shopButton);
 
     let healButton = document.createElement("button");
