@@ -463,6 +463,11 @@ function showCharacterInfo() {
     characterIntelligence.innerText = `📚 Intelligence: ${character.intelligence}`;
     characterInfo.appendChild(characterIntelligence);
 
+    // Character music taste
+    let characterMusicTaste = document.createElement("p");
+    characterMusicTaste.innerText = `🎤 Music taste: bad`;
+    characterInfo.appendChild(characterMusicTaste);
+
     gs.appendChild(characterInfo);
 }
 
