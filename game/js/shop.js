@@ -3,6 +3,12 @@ let character;
 const getCharacterData = () => (character = getData("character"));
 const safeSubtract = (value1, value2) => Number(value1) - Number(value2);
 const saveCharacter = (character) => setData("character", character);
+
+const debug = () => {
+  let debug = document.querySelector("#debug");
+  debug.innerText = JSON.parse(character.backpack);
+};
+
 const setGold = () => {
   let gold = document.querySelector("h3");
   gold.innerText = `💰 ${character.gold}  (poor)`;
@@ -43,6 +49,7 @@ const buyItem = (itemValue) => {
   character.gold = safeSubtract(character.gold, itemValue);
   saveCharacter(character);
   setGold();
+  debug();
 };
 
 startShop();
