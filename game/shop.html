@@ -12,21 +12,30 @@
     <h1>🛍️ Shop</h1>
     <h3 id="character-gold-title"></h3>
     <br />
-    <p id="debug"></p>
     <div style="margin-bottom: 15px">
       <p>Choose an item to buy</p>
-      <select name="availableItems"></select>
-      <button href="/game/index.html" class="link__button-styled">Buy</button>
+      <select name="availableItemsToBuy"></select>
+      <button class="link__button-styled">Buy</button>
+    </div>
+    <div style="margin-bottom: 15px">
+      <p>Choose an item to sell</p>
+      <select name="availableItemsToSell"></select>
+      <button class="link__button-styled">Sell</button>
+    </div>
+    <div id="backpack-space" class="gray-border">
+      <h3 id="backpack-title">🎒 Backpack</h3>
     </div>
     <a
       id="return-to-town-button"
       href="/game/index.html"
-      class="link__button-styled"
+      class="link__button-styled shop_return-to-town-button"
     >
       🏘️ Return to town
     </a>
     <script src="js/persistence.js"></script>
     <script src="js/items.js"></script>
-    <script src="js/shop.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/shop.js" type="module"></script>
+    <script src="js/backpack.js" type="module"></script>
   </body>
 </html>
