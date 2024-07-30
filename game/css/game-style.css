@@ -45,6 +45,10 @@ p {
   gap: 5px;
 }
 
+.shop__items-to-sell {
+  margin: 15px 0;
+}
+
 input {
   font-size: 16px;
 }

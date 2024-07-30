@@ -7,7 +7,7 @@ export const addToBackpack = (itemId, quantity, character) => {
     }
     }
   
-export const removeFromBackpack = (itemId, quantity) => {
+export const removeFromBackpack = (itemId, quantity, character) => {
     let foundItems = character.backpack.filter((x) => x.id == itemId);
     if (foundItems.length > 0) {
       foundItems[0].quantity -= quantity;
@@ -35,7 +35,14 @@ const createBackpackItemElement = (itemReference) => {
 }
 
 export const showCharacterBackpack = (character) => {
-  const backpackSpace = document.querySelector('#backpack-space');
+  const backpackSpace = document.querySelector('.backpack__items');
+  const backpackItems = backpackSpace.querySelectorAll('p');
+
+  if (backpackItems) {
+    for (let item of backpackItems) {
+      item.remove();
+    }
+  }
 
   if (character.backpack.length > 0) {
     let emptyElement = document.querySelector("#backpack-empty");
