@@ -68,6 +68,7 @@ function showGetNameScreen() {
     "onclick",
     "getName(); createCharacter(); returnToTown();"
   );
+  startGameButton.setAttribute("class", "link__button-styled");
   startGameButton.innerText = "Start Game!";
   gs.appendChild(startGameButton);
 
@@ -762,7 +763,7 @@ function showHuntShopAndHealButtons() {
   let shopButton = document.createElement("a");
   shopButton.innerText = "🛒 Shop";
   shopButton.id = "shop-button";
-  shopButton.setAttribute("href", "/game/shop.html");
+  shopButton.setAttribute("href", "shop.html");
   shopButton.setAttribute("class", "link__button-styled");
   buttonsContainer.appendChild(shopButton);
 
