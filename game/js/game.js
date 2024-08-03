@@ -4,23 +4,21 @@ let currentEnemy = {};
 let battleLogs = [];
 let battleTurnTimeout;
 
-const BASE_CHARACTER_ACCURACY = 0.9
-const BASE_ENEMY_ACCURACY = 0.8
+const BASE_CHARACTER_ACCURACY = 0.9;
+const BASE_ENEMY_ACCURACY = 0.8;
 
-const INITIAL_HEALTH = 50
-const INITIAL_STRENGTH = 10
-const INITIAL_INTELLIGENCE = 5
-const HEALTH_GAIN_PER_LEVEL = 5
-const STRENGTH_GAIN_PER_LEVEL = 2
-const INTELLIGENCE_GAIN_PER_LEVEL = 1
+const INITIAL_HEALTH = 50;
+const INITIAL_STRENGTH = 10;
+const INITIAL_INTELLIGENCE = 5;
+const HEALTH_GAIN_PER_LEVEL = 5;
+const STRENGTH_GAIN_PER_LEVEL = 2;
+const INTELLIGENCE_GAIN_PER_LEVEL = 1;
 
-const BATTLE_CLOCKS = ["🕛", "🕒", "🕕", "🕘"]
+const BATTLE_CLOCKS = ["🕛", "🕒", "🕕", "🕘"];
 let currentBattleClock = 0;
-
 
 // Main game space (global)
 let gs = document.getElementById("game-space");
-
 
 // Game functions
 function createCharacter() {
@@ -37,18 +35,17 @@ function createCharacter() {
             name: "Small Knife",
             type: "weapon",
             attack: 1,
-            value: 5
+            value: 5,
         },
         equippedShield: {},
         gold: 0,
-        backpack: []
+        backpack: [],
     };
 }
 
-
 function clearGameSpace() {
     while (gs.firstChild) {
-        gs.lastChild.remove()
+        gs.lastChild.remove();
     }
 }
 
@@ -68,7 +65,8 @@ function showGetNameScreen() {
     let startGameButton = document.createElement("button");
     startGameButton.id = "start-game-button";
     startGameButton.setAttribute("onclick", "getName(); createCharacter(); returnToTown();");
-    startGameButton.innerText = "Start Game!"
+    startGameButton.setAttribute("class", "link__button-styled");
+    startGameButton.innerText = "Start Game!";
     gs.appendChild(startGameButton);
 
     // Enable starting game by pressing enter
@@ -104,7 +102,9 @@ function showEnemiesList() {
     enemiesSelect.name = "choose-enemies";
     enemiesSelect.id = "choose-enemies";
 
-    let unlockedEnemies = all_enemies.filter(enemy => enemy.level <= character.level);
+    let unlockedEnemies = all_enemies.filter(
+        (enemy) => enemy.level <= character.level
+    );
     for (let enemy of unlockedEnemies) {
         let enemyOption = document.createElement("option");
         enemyOption.value = enemy.id;
@@ -118,6 +118,7 @@ function showBattleButton() {
     let battleButton = document.createElement("button");
     battleButton.innerText = "⚔️ Battle!";
     battleButton.setAttribute("onclick", "startBattle()");
+    battleButton.setAttribute("class", "link__button-styled");
     gs.appendChild(battleButton);
 }
 
@@ -131,7 +132,7 @@ function startBattle(sameEnemy = false) {
     if (!sameEnemy) {
         let chooseEnemies = document.getElementById("choose-enemies");
         let chosenEnemyId = chooseEnemies.value;
-        let enemy = all_enemies.filter(en => en.id == chosenEnemyId)[0];
+        let enemy = all_enemies.filter((en) => en.id == chosenEnemyId)[0];
         // Clone enemy and set as currentEnemy (global variable)
         currentEnemy = JSON.parse(JSON.stringify(enemy));
     }
@@ -163,6 +164,8 @@ function showReturnToTownButton() {
     returnToTownButton.innerText = "🏘️ Return to town";
     returnToTownButton.id = "return-to-town-button";
     returnToTownButton.setAttribute("onclick", "returnToTown();");
+    returnToTownButton.setAttribute("class", "link__button-styled");
+    returnToTownButton.setAttribute("style", "margin: 0 5px");
     gs.appendChild(returnToTownButton);
 }
 
@@ -171,17 +174,22 @@ function showBattleAgainButton() {
     battleAgainButton.innerText = "⚔️ Battle again!";
     battleAgainButton.id = "battle-again-button";
     battleAgainButton.setAttribute("onclick", "startBattle(sameEnemy = true);");
+    battleAgainButton.setAttribute("class", "link__button-styled");
     gs.appendChild(battleAgainButton);
 }
 
 function calculateLevelAndStats(character) {
-    let calculatedLevel = exp_table.filter(x => x <= character.experience).length - 1;
+    let calculatedLevel =
+        exp_table.filter((x) => x <= character.experience).length - 1;
     let levelChanged = calculatedLevel != character.level;
 
     character.level = calculatedLevel;
-    character.maxHealth = (character.level - 1) * HEALTH_GAIN_PER_LEVEL + INITIAL_HEALTH;
-    character.strength = (character.level - 1) * STRENGTH_GAIN_PER_LEVEL + INITIAL_STRENGTH;
-    character.intelligence = (character.level - 1) * INTELLIGENCE_GAIN_PER_LEVEL + INITIAL_INTELLIGENCE;
+    character.maxHealth =
+        (character.level - 1) * HEALTH_GAIN_PER_LEVEL + INITIAL_HEALTH;
+    character.strength =
+        (character.level - 1) * STRENGTH_GAIN_PER_LEVEL + INITIAL_STRENGTH;
+    character.intelligence =
+        (character.level - 1) * INTELLIGENCE_GAIN_PER_LEVEL + INITIAL_INTELLIGENCE;
 
     if (levelChanged) {
         // Character died or grew in level, both should restore life
@@ -213,14 +221,22 @@ function attemptToRun() {
     // Damage to character
     if (totalDamage > 0) {
         character.currentHealth -= totalDamage;
-        logDamage(totalDamage, toEnemy = false);
+        logDamage(totalDamage, (toEnemy = false));
     }
     if (character.currentHealth <= 0) {
         character.currentHealth = 0;
-        alert(`While attempting to run, the ${nameAndSymbol(currentEnemy)} caught you and you fell in battle 💀\nYou lost 10% of your total experience and all of your gold.`)
+        alert(
+            `While attempting to run, the ${nameAndSymbol(
+                currentEnemy
+            )} caught you and you fell in battle 💀\nYou lost 10% of your total experience and all of your gold.`
+        );
         character = calculateLevelAndStats(applyDeathPenalty(character));
     } else {
-        alert(`You succesfully ran away, but the ${nameAndSymbol(currentEnemy)} hit you for more ${totalDamage} damage`);
+        alert(
+            `You succesfully ran away, but the ${nameAndSymbol(
+                currentEnemy
+            )} hit you for more ${totalDamage} damage`
+        );
     }
     returnToTown();
 }
@@ -242,7 +258,7 @@ function showBattleInformation(battleOver = false) {
     // VERSUS
     let versus = document.createElement("h2");
     versus.innerText = `${character.name} vs. ${nameAndSymbol(currentEnemy)}`;
-    versus.id = "versus"
+    versus.id = "versus";
     gs.appendChild(versus);
 
     showEnemyInformation();
@@ -257,25 +273,28 @@ function battleTurn() {
 
     if (character.currentHealth == 0 || currentEnemy.currentHealth == 0) {
         if (character.currentHealth == 0) {
-            alert(`Battle over!! The ${nameAndSymbol(currentEnemy)} won 💀\nYou lost 10% of your total experience and all of your gold.`);
-            character = calculateLevelAndStats(applyDeathPenalty(character));
-            returnToTown();
-        } else {
-            let lootItems = calculateBattleLoot();
-            let lootText = renderLootText(lootItems);
-            character.experience += currentEnemy.experience;
-            previousLevel = character.level
-            character = calculateLevelAndStats(character);
-            logBattleInfo("\n\nBattle over! You won, yay!! 🎉");
-            logBattleInfo(`The ${nameAndSymbol(currentEnemy)} loot was: ${lootText}`);
-            showBattleInformation(battleOver = true);
-            if (character.level > previousLevel) {
-                alert(`You advanced to level ${character.level}!`)
-            }
-        }
-    } else {
-        battleTurnTimeout = setTimeout(battleTurn, 1000);
-    }
+            alert(
+                `Battle over!! The ${nameAndSymbol(currentEnemy)
+				} won 💀\nYou lost 10% of your total experience and all of your gold.`
+      		);
+      		character = calculateLevelAndStats(applyDeathPenalty(character));
+			returnToTown();
+    	} else {
+			let lootItems = calculateBattleLoot();
+			let lootText = renderLootText(lootItems);
+			character.experience += currentEnemy.experience;
+			previousLevel = character.level;
+			character = calculateLevelAndStats(character);
+			logBattleInfo("\n\nBattle over! You won, yay!! 🎉");
+			logBattleInfo(`The ${nameAndSymbol(currentEnemy)} loot was: ${lootText}`);
+			showBattleInformation((battleOver = true));
+			if (character.level > previousLevel) {
+				alert(`You advanced to level ${character.level}!`);
+			}
+		}
+	} else {
+		battleTurnTimeout = setTimeout(battleTurn, 1000);
+	}
 }
 
 function calculateBattleLoot() {
@@ -288,7 +307,7 @@ function calculateBattleLoot() {
             item.quantity = quantity;
             lootItems.push(item);
 
-            if (item.type == "gold") {
+            if (item.type === "gold") {
                 character.gold += quantity;
             } else {
                 addToBackpack(item.id, quantity);
@@ -301,9 +320,9 @@ function calculateBattleLoot() {
 function getCharacterPower() {
     let characterPower = 2 * character.level;
     if ("attack" in character.equippedWeapon) {
-        characterPower += (3 * character.equippedWeapon.attack);
+        characterPower += 3 * character.equippedWeapon.attack;
     }
-    return characterPower
+    return characterPower;
 }
 
 function getCharacterDefense() {
@@ -311,29 +330,29 @@ function getCharacterDefense() {
     if ("defense" in character.equippedShield) {
         defense += character.equippedShield.defense;
     }
-    return defense
+    return defense;
 }
 
 function getEnemyPower() {
-    return 2 * currentEnemy.level + 3 * currentEnemy.attack
+    return 2 * currentEnemy.level + 3 * currentEnemy.attack;
 }
 
 function getEnemyDefense() {
-    return 2 * currentEnemy.level + currentEnemy.defense
+    return 2 * currentEnemy.level + currentEnemy.defense;
 }
 
 function calculateDamageToEnemy() {
-    power = getCharacterPower()
-    damage = normalDistribution(power, 0.2 * power)
-    enemy_defense = getEnemyDefense()
-    return Math.round(damage - enemy_defense)
+    let power = getCharacterPower();
+    let damage = normalDistribution(power, 0.2 * power);
+    let enemy_defense = getEnemyDefense();
+    return Math.round(damage - enemy_defense);
 }
 
 function calculateDamageToCharacter() {
-    power = getEnemyPower()
-    damage = normalDistribution(power, 0.2 * power)
-    character_defense = getCharacterDefense()
-    return Math.round(damage - character_defense)
+    let power = getEnemyPower();
+    let damage = normalDistribution(power, 0.2 * power);
+    let character_defense = getCharacterDefense();
+    return Math.round(damage - character_defense);
 }
 
 function logBattleInfo(text) {
@@ -353,49 +372,41 @@ function logDamage(damage, toEnemy = true) {
 }
 
 function calculateBattleTurn() {
-    // Your attack
+    // Character attack
     if (Math.random() <= BASE_CHARACTER_ACCURACY) {
-        // You hit your attack
         let damageToEnemy = calculateDamageToEnemy();
-
         if (damageToEnemy > 0) {
             currentEnemy.currentHealth -= damageToEnemy;
-            logDamage(damageToEnemy, toEnemy = true);
+            logDamage(damageToEnemy, true);
         }
     } else {
-        // You miss your attack
         logBattleInfo("You miss your attack!");
     }
 
-    // Enemy's attack
+    // Enemy attack
     if (Math.random() <= BASE_ENEMY_ACCURACY) {
-        // It hits you
         let damageToCharacter = calculateDamageToCharacter();
-
         if (damageToCharacter > 0) {
             character.currentHealth -= damageToCharacter;
-            logDamage(damageToCharacter, toEnemy = false);
+            logDamage(damageToCharacter, false);
         }
     } else {
-        // It misses
         logBattleInfo("The enemy misses their attack!");
     }
 
-    // Health can't reach negative
-    if (character.currentHealth < 0) {
-        character.currentHealth = 0;
-    }
-    if (currentEnemy.currentHealth < 0) {
-        currentEnemy.currentHealth = 0;
-    }
+    // Prevent negative health values
+    character.currentHealth = Math.max(character.currentHealth, 0);
+    currentEnemy.currentHealth = Math.max(currentEnemy.currentHealth, 0);
 }
 
 function showEnemyInformation() {
     let enemyHealth = document.createElement("p");
-    enemyHealth.innerHTML = `Enemy health: <span style="color:${getHealthColor(currentEnemy.currentHealth, currentEnemy.maxHealth)};">${currentEnemy.currentHealth}</span> / ${currentEnemy.maxHealth}`;
+    enemyHealth.innerHTML = `Enemy health: <span style="color:${getHealthColor(
+        currentEnemy.currentHealth,
+        currentEnemy.maxHealth
+    )};">${currentEnemy.currentHealth}</span> / ${currentEnemy.maxHealth}`;
     gs.appendChild(enemyHealth);
 }
-
 
 function showHuntScreen() {
     clearGameSpace();
@@ -428,8 +439,9 @@ function showNameLevelAndExp() {
     // Experience Bar
     let characterExpBar = document.createElement("progress");
     characterExpBar.id = "exp-bar";
-    let percentageExp = (character.experience - totalExpForLevel(character.level));
-    percentageExp /= (totalExpForLevel(character.level + 1) - totalExpForLevel(character.level));
+    let percentageExp = character.experience - totalExpForLevel(character.level);
+    percentageExp /=
+        totalExpForLevel(character.level + 1) - totalExpForLevel(character.level);
     characterExpBar.setAttribute("value", Math.round(percentageExp * 100));
     characterExpBar.setAttribute("max", 100);
     gs.appendChild(characterExpBar);
@@ -450,7 +462,10 @@ function showCharacterInfo() {
 
     // Character health
     let characterHealth = document.createElement("p");
-    characterHealth.innerHTML = `&#128151; Health: <span style="color:${getHealthColor(character.currentHealth, character.maxHealth)};">${character.currentHealth}</span> / ${character.maxHealth}`;
+    characterHealth.innerHTML = `&#128151; Health: <span style="color:${getHealthColor(
+        character.currentHealth,
+        character.maxHealth
+    )};">${character.currentHealth}</span> / ${character.maxHealth}`;
     characterInfo.appendChild(characterHealth);
 
     // Character strength
@@ -514,7 +529,7 @@ function showCharacterBackpack() {
 }
 
 function addToBackpack(itemId, quantity) {
-    let foundItems = character.backpack.filter(x => x.id == itemId);
+    let foundItems = character.backpack.filter((x) => x.id == itemId);
     if (foundItems.length > 0) {
         foundItems[0].quantity += quantity;
     } else {
@@ -523,11 +538,11 @@ function addToBackpack(itemId, quantity) {
 }
 
 function removeFromBackpack(itemId, quantity) {
-    let foundItems = character.backpack.filter(x => x.id == itemId);
+    let foundItems = character.backpack.filter((x) => x.id == itemId);
     if (foundItems.length > 0) {
         foundItems[0].quantity -= quantity;
         if (foundItems[0].quantity <= 0) {
-            character.backpack = character.backpack.filter(x => x.id != itemId);
+            character.backpack = character.backpack.filter((x) => x.id != itemId);
         }
     }
 }
@@ -547,14 +562,14 @@ function unequipShield() {
 }
 
 function equipItem(itemType) {
-    let elementId = itemType == "weapon" ? "character-weapons" : "character-shields"
+    let elementId = itemType == "weapon" ? "character-weapons" : "character-shields";
     let characterItems = document.getElementById(elementId);
-    chosenItemId = characterItems.value
+    chosenItemId = characterItems.value;
 
     if (itemType == "weapon") {
-        unequipWeapon()
+        unequipWeapon();
     } else {
-        unequipShield()
+        unequipShield();
     }
 
     if (chosenItemId != "0") {
@@ -569,7 +584,6 @@ function equipItem(itemType) {
     returnToTown();
 }
 
-
 function showEquippedItems() {
     let equippedItems = document.createElement("div");
     equippedItems.id = "equipped-items";
@@ -577,7 +591,7 @@ function showEquippedItems() {
 
     let equippedItemsTitle = document.createElement("h3");
     equippedItemsTitle.id = "equipped-items-title";
-    equippedItemsTitle.innerText = "Equipped items"
+    equippedItemsTitle.innerText = "Equipped items";
     equippedItems.appendChild(equippedItemsTitle);
 
     // Character Weapons
@@ -600,7 +614,7 @@ function showEquippedItems() {
     let weaponIds = [];
 
     // Add equipped weapon to select
-    if (("id" in character.equippedWeapon) && !(weaponIds.includes(character.equippedWeapon.id))) {
+    if ("id" in character.equippedWeapon && !weaponIds.includes(character.equippedWeapon.id)) {
         let equippedWeaponOption = document.createElement("option");
         equippedWeaponOption.value = character.equippedWeapon.id;
         equippedWeaponOption.innerText = `${character.equippedWeapon.name} (atk: ${character.equippedWeapon.attack})`;
@@ -611,7 +625,7 @@ function showEquippedItems() {
         noWeapon.setAttribute("selected", "selected");
     }
 
-    let weapons = backpackItems.filter(item => item.type == "weapon");
+    let weapons = backpackItems.filter((item) => item.type == "weapon");
     weapons.sort((a, b) => b.attack - a.attack);
     // Add backpack weapons to select
     for (let weapon of weapons) {
@@ -629,10 +643,10 @@ function showEquippedItems() {
     insertLineBreak(equippedItems, 1);
 
     // Character shields
-    let characterShieldsLable = document.createElement("label");
-    characterShieldsLable.innerText = "🛡 Shield: ";
-    characterShieldsLable.setAttribute("for", "shields");
-    equippedItems.appendChild(characterShieldsLable);
+    let characterShieldsLabel = document.createElement("label");
+    characterShieldsLabel.innerText = "🛡 Shield: ";
+    characterShieldsLabel.setAttribute("for", "shields");
+    equippedItems.appendChild(characterShieldsLabel);
 
     let characterShields = document.createElement("select");
     characterShields.name = "shields";
@@ -647,7 +661,7 @@ function showEquippedItems() {
     let shieldIds = [];
 
     // Add equipped shield to select
-    if (("id" in character.equippedShield) && !(weaponIds.includes(character.equippedShield.id))) {
+    if ("id" in character.equippedShield && !shieldIds.includes(character.equippedShield.id)) {
         let equippedShieldOption = document.createElement("option");
         equippedShieldOption.value = character.equippedShield.id;
         equippedShieldOption.innerText = `${character.equippedShield.name} (def: ${character.equippedShield.defense})`;
@@ -659,7 +673,7 @@ function showEquippedItems() {
     }
 
     // Add backpack shields to select
-    let shields = backpackItems.filter(item => item.type == "shield");
+    let shields = backpackItems.filter((item) => item.type == "shield");
     shields.sort((a, b) => b.defense - a.defense);
     for (let shield of shields) {
         if (shieldIds.includes(shield.id)) {
@@ -686,16 +700,11 @@ function showCharacterGold() {
     characterGoldTitle.innerText = "💰 Gold";
     characterGold.appendChild(characterGoldTitle);
 
-    let characterGoldText = document.createElement("p")
+    let characterGoldText = document.createElement("p");
     characterGoldText.innerText = `${character.gold} gold coins  (poor)`;
     characterGold.appendChild(characterGoldText);
 
     gs.appendChild(characterGold);
-}
-
-function showShop() {
-    clearGameSpace()
-    showReturnToTownButton()
 }
 
 function heal() {
@@ -714,29 +723,38 @@ function heal() {
 }
 
 function showHuntShopAndHealButtons() {
+    let buttonsContainer = document.createElement("div");
+    buttonsContainer.setAttribute("class", "button-container");
+
     let goHuntButton = document.createElement("button");
     goHuntButton.innerText = "🏹 Go Hunt!";
     goHuntButton.id = "hunt-button";
     goHuntButton.setAttribute("onclick", "chooseBattle()");
-    gs.appendChild(goHuntButton);
+    goHuntButton.setAttribute("class", "link__button-styled");
+    buttonsContainer.appendChild(goHuntButton);
 
-    let shopButton = document.createElement("button");
+    let shopButton = document.createElement("a");
     shopButton.innerText = "🛒 Shop";
     shopButton.id = "shop-button";
-    shopButton.setAttribute("onclick", "showShop()");
-    gs.appendChild(shopButton);
+    shopButton.setAttribute("href", "shop.html");
+    shopButton.setAttribute("class", "link__button-styled");
+    buttonsContainer.appendChild(shopButton);
 
     let healButton = document.createElement("button");
     healButton.innerText = "🩹 Heal";
     healButton.id = "heal-button";
     healButton.setAttribute("onclick", "heal()");
-    gs.appendChild(healButton);
+    healButton.setAttribute("class", "link__button-styled");
+    buttonsContainer.appendChild(healButton);
 
     let travelInTimeButton = document.createElement("button");
     travelInTimeButton.innerText = "⌛ Travel in time";
     travelInTimeButton.id = "time-button";
     travelInTimeButton.setAttribute("onclick", "travelInTime()");
-    gs.appendChild(travelInTimeButton);
+    travelInTimeButton.setAttribute("class", "link__button-styled");
+    buttonsContainer.appendChild(travelInTimeButton);
+
+    gs.appendChild(buttonsContainer);
 }
 
 function returnToTown() {
