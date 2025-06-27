@@ -9,7 +9,7 @@
         body {
             /* text-align: center; */
             font-family: Arial, sans-serif;
-            background-color: rgb(228, 228, 228);
+            background-color: #e4e4e4;
         }
 
         h1 {
@@ -22,6 +22,15 @@
 
         div {
             display: inline-block;
+            color: #111;
+        }
+
+        h1 div {
+            color: #3a8d3d;
+        }
+
+        h3 div {
+            color: #555;
         }
     </style>
 </head>
@@ -36,6 +45,19 @@
     <h3>
         <div id="mensagem2"></div>
     </h3>
+
+    <h3 style="display:inline-block;">Entediada?</h3>
+    <button id="dado">Jogue o dado 🎲</button>
+    <div id="resultado" , style="display: block;"></div>
+    <h3 style="display:inline-block;">Escolha um tema para o site:</h3>
+    <select id="tema" onchange="mudarTema()">
+        <option value="original">Original</option>
+        <option value="pink">Pink Poney Club</option>
+        <option value="dark">Gótica Rabuda</option>
+        <option value="eco">Esquerdomacho de Ecobag</option>
+    </select>
+
+
     <script src="js/main.js"></script>
 </body>
 
