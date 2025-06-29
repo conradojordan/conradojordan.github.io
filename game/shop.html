@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop</title>
+    <link rel="stylesheet" href="css/game-style.css" />
+  </head>
+
+  <body>
+    <h1>🛍️ Shop</h1>
+    <h3 id="character-gold-title"></h3>
+    <br />
+    <div>
+      <p>Choose an item to buy</p>
+      <select name="availableItemsToBuy"></select>
+      <button class="link__button-styled">Buy</button>
+    </div>
+    <div class="shop__items-to-sell">
+      <p>Choose an item to sell</p>
+      <select name="availableItemsToSell"></select>
+      <button class="link__button-styled">Sell</button>
+    </div>
+    <div id="backpack-space" class="gray-border">
+      <h3 id="backpack-title">🎒 Backpack</h3>
+      <div class="backpack__items"></div>
+    </div>
+    <a
+      id="return-to-town-button"
+      href="index.html"
+      class="link__button-styled shop_return-to-town-button"
+    >
+      🏘️ Return to town
+    </a>
+    <script src="js/persistence.js"></script>
+    <script src="js/items.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/shop.js" type="module"></script>
+  </body>
+</html>
